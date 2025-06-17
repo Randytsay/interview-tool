@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>美安招募訪談工具</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
+            color: white;
+            padding: 24px;
+            text-align: center;
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .card-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .card-content {
+            padding: 24px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #374151;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+        
+        .btn {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn:hover:not(:disabled) {
+            background: #4338ca;
+            transform: translateY(-2px);
+        }
+        
+        .btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-outline {
+            background: white;
+            color: #4f46e5;
+            border: 2px solid #4f46e5;
+        }
+        
+        .btn-outline:hover:not(:disabled) {
+            background: #4f46e5;
+            color: white;
+        }
+        
+        .btn-green {
+            background: #059669;
+        }
+        
+        .btn-green:hover:not(:disabled) {
+            background: #047857;
+        }
+        
+        .progress-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+        
+        .progress-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #d1d5db;
+            transition: background 0.3s;
+        }
+        
+        .progress-dot.active {
+            background: #4f46e5;
+        }
+        
+        .progress-line {
+            width: 32px;
+            height: 4px;
+            background: #d1d5db;
+            transition: background 0.3s;
+        }
+        
+        .progress-line.active {
+            background: #4f46e5;
+        }
+        
+        .ranking-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            background: #f9fafb;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            transition: all 0.3s;
+        }
+        
+        .ranking-item:hover {
+            border-color: #4f46e5;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.1);
+        }
+        
+        .ranking-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .ranking-number {
+            width: 32px;
+            height: 32px;
+            background: #4f46e5;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .ranking-icon {
+            font-size: 24px;
+        }
+        
+        .ranking-label {
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .ranking-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .arrow-btn {
+            background: none;
+            border: none;
+            color: #6b7280;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: color 0.3s;
+        }
+        
+        .arrow-btn:hover:not(:disabled) {
+            color: #4f46e5;
+        }
+        
+        .arrow-btn:disabled {
+            color: #d1d5db;
+            cursor: not-allowed;
+        }
+        
+        .rating-item {
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px;
+            background: #f9fafb;
+            margin-bottom: 16px;
+        }
+        
+        .rating-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+        
+        .rating-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .rating-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #4f46e5;
+        }
+        
+        .slider-container {
+            padding: 0 8px;
+        }
+        
+        .slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            outline: none;
+            cursor: pointer;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #4f46e5;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+        
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #4f46e5;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+        
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 8px;
+        }
+        
+        .results-section {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .results-title {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+        
+        .result-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: #f9fafb;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .result-item.high-need {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+        }
+        
+        .opportunity-box {
+            margin-top: 16px;
+            padding: 16px;
+            background: #d1fae5;
+            border-radius: 12px;
+            border: 2px solid #10b981;
+        }
+        
+        .opportunity-text {
+            color: #065f46;
+            font-weight: 600;
+            font-size: 14px;
+            text-align: center;
+        }
+        
+        .btn-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        
+        .info-text {
+            text-align: center;
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 16px;
+        }
+        
+        .highlight {
+            color: #fbbf24;
+            font-weight: 900;
+            font-size: 1.2em;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 第一頁：基本資料 -->
+        <div id="page-0" class="card">
+            <div class="card-header">
+                <div class="card-title">👤 百業訪談</div>
+            </div>
+            <div class="card-content">
+                <div class="form-group">
+                    <label class="form-label">訪談對象姓名</label>
+                    <input type="text" id="interviewee-name" class="form-input" placeholder="請輸入姓名">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">訪談日期</label>
+                    <input type="date" id="interview-date" class="form-input">
+                </div>
+                <button id="start-btn" class="btn" disabled>
+                    開始評估 →
+                </button>
+            </div>
+        </div>
+
+        <!-- 第二頁：排序 -->
+        <div id="page-1" class="card hidden">
+            <div class="progress-bar">
+                <div class="progress-dot active"></div>
+                <div class="progress-line active"></div>
+                <div class="progress-dot active"></div>
+                <div class="progress-line"></div>
+                <div class="progress-dot"></div>
+                <div class="progress-line"></div>
+                <div class="progress-dot"></div>
+            </div>
+            <div class="card-header">
+                <div class="card-title">💭 <span class="highlight">理想</span>工作重要性排序</div>
+                <div class="card-subtitle">請用上下箭頭調整順序 (上方最重要 → 下方最不重要)</div>
+            </div>
+            <div class="card-content">
+                <div id="ranking-list"></div>
+                <div class="info-text">💡 提示：點擊上下箭頭可調整順序</div>
+                <button id="next-to-rating" class="btn" style="margin-top: 20px;">
+                    下一題 →
+                </button>
+            </div>
+        </div>
+
+        <!-- 第三頁：評分 -->
+        <div id="page-2" class="card hidden">
+            <div class="progress-bar">
+                <div class="progress-dot active"></div>
+                <div class="progress-line active"></div>
+                <div class="progress-dot active"></div>
+                <div class="progress-line active"></div>
+                <div class="progress-dot active"></div>
+                <div class="progress-line"></div>
+                <div class="progress-dot"></div>
+            </div>
+            <div class="card-header">
+                <div class="card-title">📊 <span class="highlight">目前</span>工作滿意度評分</div>
+                <div class="card-subtitle">請為目前工作評分 (1很不滿意 → 5很滿意)</div>
+            </div>
+            <div class="card-content">
+                <div id="rating-list"></div>
+                <div style="display: flex; gap: 12px; margin-top: 20px;">
+                    <button id="back-to-ranking" class="btn btn-outline" style="flex: 1;">
+                        ← 上一題
+                    </button>
+                    <button id="show-results" class="btn" style="flex: 1;">
+                        查看結果 →
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第四頁：結果 -->
+        <div id="page-results" class="card hidden">
+            <div class="progress-bar">
+                <div class="progress-dot active"></div>
+                <div class="progress-line active"></div>
+                <div class="progress-dot active"></div>
+                <div class="progress-line active"></div>
+                <div class="progress-dot active"></div>
+                <div class="progress-line active"></div>
+                <div class="progress-dot active"></div>
+            </div>
+            <div class="card-header">
+                <div class="card-title" id="results-title">分析結果</div>
+                <div class="card-subtitle" id="results-date"></div>
+            </div>
+            <div class="card-content">
+                <!-- 理想工作排序結果 -->
+                <div class="results-section">
+                    <div class="results-title">📋 理想工作重要性排序</div>
+                    <div id="ranking-results"></div>
+                </div>
+
+                <!-- 目前工作滿意度結果 -->
+                <div class="results-section">
+                    <div class="results-title">📊 目前工作滿意度評分</div>
+                    <div id="rating-results"></div>
+                </div>
+
+
+                <div class="btn-group">
+                    <button id="download-report" class="btn btn-outline">
+                        📥 下載報告
+                    </button>
+                    <button id="take-screenshot" class="btn btn-green">
+                        📷 截圖儲存
+                    </button>
+                </div>
+
+                <button id="reset-survey" class="btn btn-outline">
+                    🔄 開始新的訪談
+                </button>
+            </div>
+        </div>
+
+        <div class="info-text" id="current-info"></div>
+    </div>
+
+    <script>
+        // 資料結構
+        const categories = [
+            { id: 'growth', label: '個人成長', icon: '📈' },
+            { id: 'promotion', label: '晉升機會', icon: '🚀' },
+            { id: 'value', label: '工作價值', icon: '💎' },
+            { id: 'prospect', label: '產業前景', icon: '🔮' },
+            { id: 'salary', label: '合理報酬', icon: '💰' }
+        ];
+
+        let currentPage = 0;
+        let intervieweeInfo = { name: '', date: '' };
+        let rankings = [...categories];
+		let ratings = {
+			growth: 3,
+			promotion: 3,
+			value: 3,
+			prospect: 3,
+			salary: 3
+		};
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 設定預設日期
+            document.getElementById('interview-date').value = new Date().toISOString().split('T')[0];
+            
+            // 綁定事件
+            bindEvents();
+            updateCurrentInfo();
+            renderRankingList();
+            renderRatingList();
+        });
+
+        function bindEvents() {
+            // 基本資料頁面
+            document.getElementById('interviewee-name').addEventListener('input', validateBasicInfo);
+            document.getElementById('interview-date').addEventListener('change', validateBasicInfo);
+            document.getElementById('start-btn').addEventListener('click', startSurvey);
+
+            // 導航按鈕
+            document.getElementById('next-to-rating').addEventListener('click', () => showPage(2));
+            document.getElementById('back-to-ranking').addEventListener('click', () => showPage(1));
+            document.getElementById('show-results').addEventListener('click', showResults);
+
+            // 結果頁面按鈕
+            document.getElementById('download-report').addEventListener('click', downloadReport);
+            document.getElementById('take-screenshot').addEventListener('click', takeScreenshot);
+            document.getElementById('reset-survey').addEventListener('click', resetSurvey);
+        }
+
+        function validateBasicInfo() {
+            const name = document.getElementById('interviewee-name').value.trim();
+            const date = document.getElementById('interview-date').value;
+            const startBtn = document.getElementById('start-btn');
+            
+            if (name && date) {
+                startBtn.disabled = false;
+                intervieweeInfo = { name, date };
+            } else {
+                startBtn.disabled = true;
+            }
+        }
+
+        function startSurvey() {
+            showPage(1);
+        }
+
+        function showPage(pageNum) {
+            // 隱藏所有頁面
+            for (let i = 0; i <= 3; i++) {
+                const page = document.getElementById(`page-${i}`);
+                if (page) page.classList.add('hidden');
+            }
+            document.getElementById('page-results').classList.add('hidden');
+
+            // 顯示目標頁面
+            if (pageNum === 99) {
+                document.getElementById('page-results').classList.remove('hidden');
+            } else {
+                document.getElementById(`page-${pageNum}`).classList.remove('hidden');
+            }
+            
+            currentPage = pageNum;
+            updateCurrentInfo();
+        }
+
+        function renderRankingList() {
+            const container = document.getElementById('ranking-list');
+            container.innerHTML = '';
+
+            rankings.forEach((category, index) => {
+                const item = document.createElement('div');
+                item.className = 'ranking-item';
+                item.innerHTML = `
+                    <div class="ranking-left">
+                        <div class="ranking-number">${index + 1}</div>
+                        <span class="ranking-icon">${category.icon}</span>
+                        <span class="ranking-label">${category.label}</span>
+                    </div>
+                    <div class="ranking-controls">
+                        <button class="arrow-btn" onclick="moveItem(${index}, 'up')" ${index === 0 ? 'disabled' : ''}>
+                            ▲
+                        </button>
+                        <button class="arrow-btn" onclick="moveItem(${index}, 'down')" ${index === rankings.length - 1 ? 'disabled' : ''}>
+                            ▼
+                        </button>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function moveItem(index, direction) {
+            const newRankings = [...rankings];
+            const targetIndex = direction === 'up' ? index - 1 : index + 1;
+            
+            if (targetIndex >= 0 && targetIndex < newRankings.length) {
+                [newRankings[index], newRankings[targetIndex]] = [newRankings[targetIndex], newRankings[index]];
+                rankings = newRankings;
+                renderRankingList();
+            }
+        }
+
+        function renderRatingList() {
+            const container = document.getElementById('rating-list');
+            container.innerHTML = '';
+
+            categories.forEach(category => {
+                const item = document.createElement('div');
+                item.className = 'rating-item';
+				item.innerHTML = `
+					<div class="rating-header">
+						<span class="rating-label">
+							<span class="ranking-icon">${category.icon}</span>
+							${category.label}
+						</span>
+						<span class="rating-value" id="rating-${category.id}">${ratings[category.id] || 3}/5</span>
+					</div>
+					<div class="slider-container">
+						<input type="range" min="1" max="5" value="${ratings[category.id] || 3}" 
+							   class="slider" id="slider-${category.id}" 
+							   oninput="updateRating('${category.id}', this.value)">
+						<div class="slider-labels">
+							<span>很不滿意</span>
+							<span>普通</span>
+							<span>很滿意</span>
+						</div>
+					</div>
+				`;
+                container.appendChild(item);
+            });
+        }
+
+        function updateRating(categoryId, value) {
+            ratings[categoryId] = parseInt(value);
+            document.getElementById(`rating-${categoryId}`).textContent = `${value}/5`;
+            
+            // 更新滑桿顏色
+            const slider = document.getElementById(`slider-${categoryId}`);
+            const percentage = ((value - 1) / 4) * 100;
+            slider.style.background = `linear-gradient(to right, #4f46e5 0%, #4f46e5 ${percentage}%, #e5e7eb ${percentage}%, #e5e7eb 100%)`;
+        }
+
+        function showResults() {
+            showPage(99);
+            renderResults();
+        }
+
+        function renderResults() {
+            // 設定標題
+            document.getElementById('results-title').textContent = `${intervieweeInfo.name} 的分析結果`;
+            document.getElementById('results-date').textContent = intervieweeInfo.date;
+
+            // 渲染排序結果
+            const rankingContainer = document.getElementById('ranking-results');
+            rankingContainer.innerHTML = '';
+            rankings.forEach((cat, index) => {
+                const item = document.createElement('div');
+                item.className = 'result-item';
+                item.innerHTML = `
+                    <div class="ranking-number">${index + 1}</div>
+                    <span class="ranking-icon">${cat.icon}</span>
+                    <span class="ranking-label">${cat.label}</span>
+                `;
+                rankingContainer.appendChild(item);
+            });
+
+            // 渲染評分結果
+            const ratingContainer = document.getElementById('rating-results');
+            ratingContainer.innerHTML = '';
+            categories.forEach(cat => {
+                const rating = ratings[cat.id] || 3;
+                const item = document.createElement('div');
+                item.className = 'result-item';
+                item.innerHTML = `
+                    <span class="ranking-icon">${cat.icon}</span>
+                    <span class="ranking-label">${cat.label}</span>
+                    <div style="margin-left: auto;">
+                        <span style="font-weight: bold; font-size: 18px;">${rating}</span>
+                        <span style="color: #6b7280;">/5</span>
+                    </div>
+                `;
+                ratingContainer.appendChild(item);
+            });
+
+
+        }
+
+
+
+
+
+        function downloadReport() {
+            try {
+                
+                let report = `=== 美安招募訪談記錄 ===\n`;
+                report += `訪談對象：${intervieweeInfo.name}\n`;
+                report += `訪談日期：${intervieweeInfo.date}\n`;
+                report += `記錄時間：${new Date().toLocaleString('zh-TW')}\n\n`;
+                
+                report += `【理想工作重要性排序】\n`;
+                rankings.forEach((cat, index) => {
+                    report += `${index + 1}. ${cat.label}\n`;
+                });
+                
+                report += `\n【目前工作滿意度評分】\n`;
+                categories.forEach(cat => {
+                    const rating = ratings[cat.id] || '未評分';
+                    report += `${cat.label}：${rating}/5\n`;
+                });
+                
+
+                
+                const blob = new Blob([report], {type: 'text/plain;charset=utf-8'});
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `訪談報告_${intervieweeInfo.name}_${intervieweeInfo.date}.txt`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+
+            } catch (error) {
+                alert('匯出失敗，請稍後再試');
+            }
+        }
+
+        function takeScreenshot() {
+            alert('請使用手機截圖功能儲存結果\n\n📱 iPhone: 同時按住電源鍵+音量上鍵\n📱 Android: 同時按住電源鍵+音量下鍵');
+        }
+
+		function resetSurvey() {
+			if (confirm('確定要重新開始嗎？目前的資料將會清除。')) {
+				currentPage = 0;
+				intervieweeInfo = { name: '', date: new Date().toISOString().split('T')[0] };
+				rankings = [...categories];
+				ratings = {
+					growth: 3,
+					promotion: 3,
+					value: 3,
+					prospect: 3,
+					salary: 3
+				};
+        
+        document.getElementById('interviewee-name').value = '';
+        document.getElementById('interview-date').value = new Date().toISOString().split('T')[0];
+        document.getElementById('start-btn').disabled = true;
+        
+        renderRankingList();
+        renderRatingList();
+        showPage(0);
+    }
+}
+
+function updateCurrentInfo() {
+    const infoElement = document.getElementById('current-info');
+    if (intervieweeInfo.name && intervieweeInfo.date) {
+        infoElement.textContent = `訪談對象：${intervieweeInfo.name} | ${intervieweeInfo.date}`;
+    } else {
+        infoElement.textContent = '';
+    }
+}
+
+// 初始化滑桿樣式
+document.addEventListener('DOMContentLoaded', function() {
+    const style = document.createElement('style');
+    style.textContent = `
+        .slider {
+            background: linear-gradient(to right, #4f46e5 0%, #4f46e5 0%, #e5e7eb 0%, #e5e7eb 100%);
+        }
+    `;
+    document.head.appendChild(style);
+});
+      </script>
+  </body>
+  </html>
