@@ -181,8 +181,8 @@
         }
         
         .ranking-number {
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             background: #4f46e5;
             color: white;
             border-radius: 50%;
@@ -200,6 +200,7 @@
         .ranking-label {
             font-weight: 600;
             color: #374151;
+			font-size: 22px;
         }
         
         .ranking-controls {
@@ -369,6 +370,84 @@
         .hidden {
             display: none;
         }
+
+		.highlight-name {
+			color: #fbbf24;
+			font-weight: 900;
+			font-size: 1.3em;
+			text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+		}
+		
+/* 手機版完整優化 */
+@media (max-width: 768px) {
+
+    #page-results .progress-bar {
+        display: none;
+    }
+    
+    /* 縮小標題區域 */
+    #page-results .card-header {
+        padding: 16px;
+    }
+    
+    #page-results .card-title {
+        font-size: 1.3rem;
+    }
+    
+    /* 縮小內容區域間距 */
+    #page-results .card-content {
+        padding: 16px;
+    }
+    
+    .results-section {
+        padding: 12px;
+        margin-bottom: 10px;
+    }
+    
+    .results-title {
+        font-size: 15px;
+        margin-bottom: 8px;
+    }
+    
+    /* 緊湊的結果項目 */
+    .result-item {
+        padding: 6px 8px;
+        margin-bottom: 4px;
+        font-size: 13px;
+    }
+    
+    .ranking-number {
+        width: 24px;
+        height: 24px;
+        font-size: 11px;
+    }
+    
+    .ranking-icon {
+        font-size: 16px;
+    }
+    
+    /* 緊湊的按鈕 */
+    .btn-group {
+        margin-bottom: 8px;
+        gap: 6px;
+    }
+    
+    .btn {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+    
+    /* 底部資訊文字縮小 */
+    .info-text {
+        font-size: 11px;
+        margin-top: 8px;
+    }
+    .highlight-name {
+        font-size: 1.2em;
+    }	
+}
+
+
     </style>
 </head>
 <body>
@@ -473,7 +552,7 @@
                     <div id="rating-results"></div>
                 </div>
 
-
+<!--
                 <div class="btn-group">
                     <button id="download-report" class="btn btn-outline">
                         📥 下載報告
@@ -482,7 +561,7 @@
                         📷 截圖儲存
                     </button>
                 </div>
-
+-->
                 <button id="reset-survey" class="btn btn-outline">
                     🔄 開始新的訪談
                 </button>
@@ -537,8 +616,6 @@
             document.getElementById('show-results').addEventListener('click', showResults);
 
             // 結果頁面按鈕
-            document.getElementById('download-report').addEventListener('click', downloadReport);
-            document.getElementById('take-screenshot').addEventListener('click', takeScreenshot);
             document.getElementById('reset-survey').addEventListener('click', resetSurvey);
         }
 
@@ -662,7 +739,7 @@
 
         function renderResults() {
             // 設定標題
-            document.getElementById('results-title').textContent = `${intervieweeInfo.name} 的分析結果`;
+            document.getElementById('results-title').innerHTML = `<span class="highlight-name">${intervieweeInfo.name}</span> 的分析結果`;
             document.getElementById('results-date').textContent = intervieweeInfo.date;
 
             // 渲染排序結果
@@ -703,7 +780,7 @@
 
 
 
-
+<!--
         function downloadReport() {
             try {
                 
@@ -739,7 +816,7 @@
                 alert('匯出失敗，請稍後再試');
             }
         }
-
+-->
         function takeScreenshot() {
             alert('請使用手機截圖功能儲存結果\n\n📱 iPhone: 同時按住電源鍵+音量上鍵\n📱 Android: 同時按住電源鍵+音量下鍵');
         }
