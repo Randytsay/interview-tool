@@ -3,26 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>美安招募訪談工具</title>
+    <title>工作的理想與現實</title>
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://randytsay.github.io/interview-tool/">
+    <meta property="og:title" content="工作的理想與現實 - 訪談問卷">
+    <meta property="og:description" content="探索理想工作與現實差距！">
+    <meta property="og:image" content="https://randytsay.github.io/interview-tool/images/survey-preview.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://randytsay.github.io/interview-tool/">
+    <meta property="twitter:title" content="工作的理想與現實-訪談問卷">
+    <meta property="twitter:description" content="探索理想工作與現實差距！">
+    <meta property="twitter:image" content="https://randytsay.github.io/interview-tool/images/survey-preview.jpg">
+
+    <!-- LINE 特別支援 -->
+    <meta property="og:site_name" content="訪談表">
+    <meta name="description" content="探索理想工作與現實差距！">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
         }
-        
+
         .container {
             max-width: 400px;
             margin: 0 auto;
         }
-        
+
         .card {
             background: white;
             border-radius: 16px;
@@ -30,40 +50,40 @@
             overflow: hidden;
             margin-bottom: 20px;
         }
-        
+
         .card-header {
             background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
             color: white;
             padding: 24px;
             text-align: center;
         }
-        
+
         .card-title {
             font-size: 1.5rem;
             font-weight: bold;
             margin-bottom: 8px;
         }
-        
+
         .card-subtitle {
             font-size: 0.9rem;
             opacity: 0.9;
         }
-        
+
         .card-content {
             padding: 24px;
         }
-        
+
         .form-group {
             margin-bottom: 20px;
         }
-        
+
         .form-label {
             display: block;
             font-weight: 600;
             margin-bottom: 8px;
             color: #374151;
         }
-        
+
         .form-input {
             width: 100%;
             padding: 12px;
@@ -72,13 +92,13 @@
             font-size: 16px;
             transition: border-color 0.3s;
         }
-        
+
         .form-input:focus {
             outline: none;
             border-color: #4f46e5;
             box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
         }
-        
+
         .btn {
             background: #4f46e5;
             color: white;
@@ -95,37 +115,37 @@
             justify-content: center;
             gap: 8px;
         }
-        
+
         .btn:hover:not(:disabled) {
             background: #4338ca;
             transform: translateY(-2px);
         }
-        
+
         .btn:disabled {
             background: #9ca3af;
             cursor: not-allowed;
             transform: none;
         }
-        
+
         .btn-outline {
             background: white;
             color: #4f46e5;
             border: 2px solid #4f46e5;
         }
-        
+
         .btn-outline:hover:not(:disabled) {
             background: #4f46e5;
             color: white;
         }
-        
+
         .btn-green {
             background: #059669;
         }
-        
+
         .btn-green:hover:not(:disabled) {
             background: #047857;
         }
-        
+
         .progress-bar {
             display: flex;
             align-items: center;
@@ -133,7 +153,7 @@
             gap: 8px;
             margin-bottom: 24px;
         }
-        
+
         .progress-dot {
             width: 12px;
             height: 12px;
@@ -141,22 +161,22 @@
             background: #d1d5db;
             transition: background 0.3s;
         }
-        
+
         .progress-dot.active {
             background: #4f46e5;
         }
-        
+
         .progress-line {
             width: 32px;
             height: 4px;
             background: #d1d5db;
             transition: background 0.3s;
         }
-        
+
         .progress-line.active {
             background: #4f46e5;
         }
-        
+
         .ranking-item {
             display: flex;
             align-items: center;
@@ -168,21 +188,21 @@
             margin-bottom: 12px;
             transition: all 0.3s;
         }
-        
+
         .ranking-item:hover {
             border-color: #4f46e5;
             box-shadow: 0 4px 12px rgba(79, 70, 229, 0.1);
         }
-        
+
         .ranking-left {
             display: flex;
             align-items: center;
             gap: 12px;
         }
-        
+
         .ranking-number {
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             background: #4f46e5;
             color: white;
             border-radius: 50%;
@@ -192,22 +212,23 @@
             font-weight: bold;
             font-size: 14px;
         }
-        
+
         .ranking-icon {
             font-size: 24px;
         }
-        
+
         .ranking-label {
             font-weight: 600;
             color: #374151;
+			font-size: 22px;
         }
-        
+
         .ranking-controls {
             display: flex;
             flex-direction: column;
             gap: 4px;
         }
-        
+
         .arrow-btn {
             background: none;
             border: none;
@@ -217,16 +238,16 @@
             border-radius: 4px;
             transition: color 0.3s;
         }
-        
+
         .arrow-btn:hover:not(:disabled) {
             color: #4f46e5;
         }
-        
+
         .arrow-btn:disabled {
             color: #d1d5db;
             cursor: not-allowed;
         }
-        
+
         .rating-item {
             border: 2px solid #e5e7eb;
             border-radius: 12px;
@@ -234,32 +255,33 @@
             background: #f9fafb;
             margin-bottom: 16px;
         }
-        
+
         .rating-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin-bottom: 16px;
         }
-        
+
         .rating-label {
             display: flex;
             align-items: center;
             gap: 8px;
             font-weight: 600;
             color: #374151;
+			font-size: 22px;
         }
-        
+
         .rating-value {
-            font-size: 18px;
+            font-size: 20px;
             font-weight: bold;
             color: #4f46e5;
         }
-        
+
         .slider-container {
             padding: 0 8px;
         }
-        
+
         .slider {
             width: 100%;
             height: 8px;
@@ -269,7 +291,7 @@
             -webkit-appearance: none;
             appearance: none;
         }
-        
+
         .slider::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
@@ -280,7 +302,7 @@
             cursor: pointer;
             box-shadow: 0 2px 6px rgba(0,0,0,0.2);
         }
-        
+
         .slider::-moz-range-thumb {
             width: 20px;
             height: 20px;
@@ -290,7 +312,7 @@
             border: none;
             box-shadow: 0 2px 6px rgba(0,0,0,0.2);
         }
-        
+
         .slider-labels {
             display: flex;
             justify-content: space-between;
@@ -298,7 +320,7 @@
             color: #6b7280;
             margin-top: 8px;
         }
-        
+
         .results-section {
             background: white;
             border-radius: 12px;
@@ -306,14 +328,15 @@
             margin-bottom: 16px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
-        
+
         .results-title {
             font-weight: bold;
             font-size: 18px;
             margin-bottom: 12px;
             text-align: center;
         }
-        
+
+        /* Result item styles */
         .result-item {
             display: flex;
             align-items: center;
@@ -322,52 +345,194 @@
             background: #f9fafb;
             border-radius: 8px;
             margin-bottom: 8px;
+            transition: all 0.3s;
+            border-left: 4px solid transparent; /* Default border */
         }
-        
-        .result-item.high-need {
-            background: #fef3c7;
-            border-left: 4px solid #f59e0b;
+
+        /* Style for integrated rating display */
+        .result-item .rating-display {
+            margin-left: auto;
+            font-weight: bold;
+            font-size: 28px;
+            color: #4f46e5;
+            flex-shrink: 0;
         }
-        
-        .opportunity-box {
-            margin-top: 16px;
-            padding: 16px;
-            background: #d1fae5;
-            border-radius: 12px;
-            border: 2px solid #10b981;
-        }
-        
-        .opportunity-text {
-            color: #065f46;
-            font-weight: 600;
+        .result-item .rating-display span {
+            color: #6b7280;
             font-size: 14px;
-            text-align: center;
+            font-weight: normal;
         }
-        
+
+        /* Highlight style for high importance, low satisfaction */
+        /* Applied when index <= 1 (Top 2 ideal importance) AND rating <= 2 (Low satisfaction) */
+        .result-item.highlight-gap {
+            background: #fef3c7; /* Light yellow background */
+            border-left-color: #f59e0b; /* Orange border */
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2); /* Add a subtle shadow */
+        }
+
+
+        /* Suggestion box style */
+        .suggestion-box {
+             margin-top: 20px;
+             padding: 16px;
+             background: #e0f2fe; /* Light blue background */
+             border-radius: 12px;
+             border: 2px solid #0ea5e9; /* Blue border */
+             text-align: left; /* Adjusted to left align text */
+        }
+
+        .suggestion-box .suggestion-title {
+             font-weight: bold;
+             color: #0369a1; /* Darker blue title */
+             margin-bottom: 8px;
+             text-align: center; /* Keep title centered */
+        }
+
+        .suggestion-box .suggestion-text {
+             color: #075985; /* Text color */
+             font-size: 15px;
+             line-height: 1.5;
+             margin-bottom: 12px; /* Add more margin below each paragraph */
+        }
+        .suggestion-box .suggestion-text:last-child {
+             margin-bottom: 0; /* No margin for the last paragraph */
+        }
+
+
         .btn-group {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 8px;
             margin-bottom: 12px;
         }
-        
+
         .info-text {
             text-align: center;
             font-size: 12px;
             color: #6b7280;
             margin-top: 16px;
         }
-        
+
         .highlight {
             color: #fbbf24;
             font-weight: 900;
             font-size: 1.2em;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
-        
+
         .hidden {
             display: none;
         }
+
+		.highlight-name {
+			color: #fbbf24;
+			font-weight: 900;
+			font-size: 1.3em;
+			text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+		}
+
+
+/* 手機版完整優化 */
+@media (max-width: 768px) {
+
+    #page-results .progress-bar {
+        display: none;
+    }
+
+    /* 縮小標題區域 */
+    #page-results .card-header {
+        padding: 16px;
+    }
+
+    #page-results .card-title {
+        font-size: 1.3rem;
+    }
+
+    /* 縮小內容區域間距 */
+    #page-results .card-content {
+        padding: 16px;
+    }
+
+    .results-section {
+        padding: 12px;
+        margin-bottom: 10px;
+    }
+
+    .results-title {
+        font-size: 15px;
+        margin-bottom: 8px;
+    }
+
+    /* 緊湊的結果項目 */
+    .result-item {
+        padding: 6px 8px;
+        margin-bottom: 4px;
+        font-size: 13px;
+        gap: 8px; /* Reduce gap */
+    }
+
+    .ranking-number {
+        width: 24px;
+        height: 24px;
+        font-size: 11px;
+    }
+
+    .ranking-icon {
+        font-size: 16px;
+    }
+
+    .ranking-label {
+        font-size: 16px; /* Adjust label size */
+    }
+
+    .result-item .rating-display {
+        font-size: 22px; /* Adjust rating size */
+    }
+     .result-item .rating-display span {
+         font-size: 12px; /* Adjust "/5" size */
+     }
+
+     /* Adjust suggestion box for mobile */
+    .suggestion-box {
+        padding: 12px;
+        margin-top: 16px;
+    }
+    .suggestion-box .suggestion-title {
+        font-size: 15px;
+        margin-bottom: 6px;
+    }
+    .suggestion-box .suggestion-text {
+        font-size: 13px;
+        margin-bottom: 8px; /* Adjust margin for mobile */
+    }
+     .suggestion-box .suggestion-text:last-child {
+         margin-bottom: 0;
+     }
+
+
+    /* 緊湊的按鈕 */
+    .btn-group {
+        margin-bottom: 8px;
+        gap: 6px;
+    }
+
+    .btn {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+
+    /* 底部資訊文字縮小 */
+    .info-text {
+        font-size: 11px;
+        margin-top: 8px;
+    }
+    .highlight-name {
+        font-size: 1.2em;
+    }
+}
+
+
     </style>
 </head>
 <body>
@@ -375,7 +540,7 @@
         <!-- 第一頁：基本資料 -->
         <div id="page-0" class="card">
             <div class="card-header">
-                <div class="card-title">👤 百業訪談</div>
+                <div class="card-title">探索理想工作與現實訪談</div>
             </div>
             <div class="card-content">
                 <div class="form-group">
@@ -460,31 +625,34 @@
                 <div class="card-subtitle" id="results-date"></div>
             </div>
             <div class="card-content">
-                <!-- 理想工作排序結果 -->
+                <!-- Removed the redundant ideal ranking summary -->
+
+                <!-- 整合顯示：理想重要性排序下的目前滿意度 -->
                 <div class="results-section">
-                    <div class="results-title">📋 理想工作重要性排序</div>
-                    <div id="ranking-results"></div>
+                    <div class="results-title">
+                        💭理想(左) 與 📊現實(右) 比較
+                    </div>
+                    <div id="integrated-results">
+                        <!-- 這裡將由 JavaScript 填充整合後的結果 -->
+                    </div>
+                    <!-- 建議顯示區域 -->
+                    <div id="suggestion-area">
+                         <!-- 這裡將由 JavaScript 填充建議 -->
+                    </div>
+
                 </div>
 
-                <!-- 目前工作滿意度結果 -->
-                <div class="results-section">
-                    <div class="results-title">📊 目前工作滿意度評分</div>
-                    <div id="rating-results"></div>
-                </div>
-
-
-                <div class="btn-group">
-                    <button id="download-report" class="btn btn-outline">
-                        📥 下載報告
-                    </button>
-                    <button id="take-screenshot" class="btn btn-green">
-                        📷 截圖儲存
-                    </button>
-                </div>
+                <!-- Removed download/screenshot buttons -->
 
                 <button id="reset-survey" class="btn btn-outline">
                     🔄 開始新的訪談
                 </button>
+                <!-- Removed screenshot hint -->
+                <!--
+                 <div class="info-text" style="margin-top: 12px;">
+                    請直接截圖儲存結果。
+                 </div>
+                -->
             </div>
         </div>
 
@@ -492,36 +660,39 @@
     </div>
 
     <script>
-        // 資料結構
+        // 資料結構 (已調整順序，合理報酬放第一個)
         const categories = [
+            { id: 'salary', label: '合理報酬', icon: '💰' },
             { id: 'growth', label: '個人成長', icon: '📈' },
-            { id: 'promotion', label: '晉升機會', icon: '🚀' },
             { id: 'value', label: '工作價值', icon: '💎' },
             { id: 'prospect', label: '產業前景', icon: '🔮' },
-            { id: 'salary', label: '合理報酬', icon: '💰' }
+            { id: 'promotion', label: '晉升機會', icon: '🚀' }
         ];
 
         let currentPage = 0;
         let intervieweeInfo = { name: '', date: '' };
-        let rankings = [...categories];
-		let ratings = {
-			growth: 3,
-			promotion: 3,
+        let rankings = [...categories]; // 理想重要性的排序，初始為 categories 的複製
+		let ratings = { // 目前工作滿意度評分，物件形式方便按 ID 查詢
+			salary: 3,
+            growth: 3,
 			value: 3,
 			prospect: 3,
-			salary: 3
+			promotion: 3
 		};
 
         // 初始化
         document.addEventListener('DOMContentLoaded', function() {
             // 設定預設日期
             document.getElementById('interview-date').value = new Date().toISOString().split('T')[0];
-            
+
             // 綁定事件
             bindEvents();
             updateCurrentInfo();
-            renderRankingList();
-            renderRatingList();
+            renderRankingList(); // 渲染排序列表（在排序頁面顯示）
+            renderRatingList(); // 渲染評分列表（在評分頁面顯示）
+
+            // 初始化滑桿樣式 (确保在元素渲染后执行)
+            initializeSliderStyles();
         });
 
         function bindEvents() {
@@ -536,16 +707,16 @@
             document.getElementById('show-results').addEventListener('click', showResults);
 
             // 結果頁面按鈕
-            document.getElementById('download-report').addEventListener('click', downloadReport);
-            document.getElementById('take-screenshot').addEventListener('click', takeScreenshot);
             document.getElementById('reset-survey').addEventListener('click', resetSurvey);
+
+            // 移除下載和截圖按鈕事件，因為不再使用
         }
 
         function validateBasicInfo() {
             const name = document.getElementById('interviewee-name').value.trim();
             const date = document.getElementById('interview-date').value;
             const startBtn = document.getElementById('start-btn');
-            
+
             if (name && date) {
                 startBtn.disabled = false;
                 intervieweeInfo = { name, date };
@@ -560,22 +731,55 @@
 
         function showPage(pageNum) {
             // 隱藏所有頁面
-            for (let i = 0; i <= 3; i++) {
+            for (let i = 0; i <= 2; i++) { // 頁面編號 0, 1, 2
                 const page = document.getElementById(`page-${i}`);
                 if (page) page.classList.add('hidden');
             }
+            // 結果頁面單獨處理，因為 ID 不同
             document.getElementById('page-results').classList.add('hidden');
 
+
             // 顯示目標頁面
-            if (pageNum === 99) {
+            if (pageNum === 99) { // 用 99 代表結果頁
                 document.getElementById('page-results').classList.remove('hidden');
             } else {
                 document.getElementById(`page-${pageNum}`).classList.remove('hidden');
             }
-            
+
             currentPage = pageNum;
             updateCurrentInfo();
+
+            // 更新進度條
+            updateProgressBar(pageNum);
         }
+
+        function updateProgressBar(pageNum) {
+             const dots = document.querySelectorAll('.progress-dot');
+             const lines = document.querySelectorAll('.progress-line');
+
+             // 進度條對應關係： Page 0 -> Dot 1, Page 1 -> Dot 2, Page 2 -> Dot 3, Page Results -> Dot 4
+             // 連線是介於點之間
+             const activeDotIndex = (pageNum === 99) ? 3 : pageNum; // 結果頁對應第四個點 (索引 3)
+
+             dots.forEach((dot, index) => {
+                 if (index <= activeDotIndex) {
+                     dot.classList.add('active');
+                 } else {
+                     dot.classList.remove('active');
+                 }
+             });
+
+             lines.forEach((line, index) => {
+                 // 連線在兩個 active 點之間時 active
+                 // 注意：lines 的索引比 dots 少一個，lines[0] 在 dots[0] 和 dots[1] 之間
+                 if (index < activeDotIndex) {
+                      line.classList.add('active');
+                 } else {
+                      line.classList.remove('active');
+                 }
+             });
+        }
+
 
         function renderRankingList() {
             const container = document.getElementById('ranking-list');
@@ -606,7 +810,7 @@
         function moveItem(index, direction) {
             const newRankings = [...rankings];
             const targetIndex = direction === 'up' ? index - 1 : index + 1;
-            
+
             if (targetIndex >= 0 && targetIndex < newRankings.length) {
                 [newRankings[index], newRankings[targetIndex]] = [newRankings[targetIndex], newRankings[index]];
                 rankings = newRankings;
@@ -618,6 +822,7 @@
             const container = document.getElementById('rating-list');
             container.innerHTML = '';
 
+            // Render based on the *initial* categories order for consistency on this page
             categories.forEach(category => {
                 const item = document.createElement('div');
                 item.className = 'rating-item';
@@ -630,8 +835,8 @@
 						<span class="rating-value" id="rating-${category.id}">${ratings[category.id] || 3}/5</span>
 					</div>
 					<div class="slider-container">
-						<input type="range" min="1" max="5" value="${ratings[category.id] || 3}" 
-							   class="slider" id="slider-${category.id}" 
+						<input type="range" min="1" max="5" value="${ratings[category.id] || 3}"
+							   class="slider" id="slider-${category.id}"
 							   oninput="updateRating('${category.id}', this.value)">
 						<div class="slider-labels">
 							<span>很不滿意</span>
@@ -642,127 +847,169 @@
 				`;
                 container.appendChild(item);
             });
+            // 初始化滑桿樣式 (確保在滑桿元素被添加到 DOM 後執行)
+            initializeSliderStyles();
         }
 
         function updateRating(categoryId, value) {
             ratings[categoryId] = parseInt(value);
             document.getElementById(`rating-${categoryId}`).textContent = `${value}/5`;
-            
+
             // 更新滑桿顏色
             const slider = document.getElementById(`slider-${categoryId}`);
             const percentage = ((value - 1) / 4) * 100;
             slider.style.background = `linear-gradient(to right, #4f46e5 0%, #4f46e5 ${percentage}%, #e5e7eb ${percentage}%, #e5e7eb 100%)`;
         }
 
+        // 初始化所有滑桿的背景顏色
+        function initializeSliderStyles() {
+             document.querySelectorAll('.slider').forEach(slider => {
+                 const value = slider.value;
+                 const percentage = ((value - 1) / 4) * 100;
+                 slider.style.background = `linear-gradient(to right, #4f46e5 0%, #4f46e5 ${percentage}%, #e5e7eb ${percentage}%, #e5e7eb 100%)`;
+             });
+        }
+
+
         function showResults() {
-            showPage(99);
-            renderResults();
+            showPage(99); // 顯示結果頁
+            renderResults(); // 渲染結果內容
         }
 
         function renderResults() {
             // 設定標題
-            document.getElementById('results-title').textContent = `${intervieweeInfo.name} 的分析結果`;
+            document.getElementById('results-title').innerHTML = `<span class="highlight-name">${intervieweeInfo.name}</span> 的分析結果`;
             document.getElementById('results-date').textContent = intervieweeInfo.date;
 
-            // 渲染排序結果
-            const rankingContainer = document.getElementById('ranking-results');
-            rankingContainer.innerHTML = '';
+            // 渲染整合後的結果：理想重要性排序下的目前滿意度
+            const integratedContainer = document.getElementById('integrated-results');
+            integratedContainer.innerHTML = '';
+
+            // 計算總滿意度分數
+            let totalRatingScore = 0;
+            for (const categoryId in ratings) {
+                totalRatingScore += ratings[categoryId];
+            }
+
+            // 計算總落差分數 (保留計算，雖然建議主要基於理想第一項和總滿意度)
+            let totalGap = 0;
+            const idealScoreMap = {};
+             // Ideal rank score: 1st = 5, 2nd = 4, ..., 5th = 1
             rankings.forEach((cat, index) => {
+                 idealScoreMap[cat.id] = categories.length - index;
+            });
+
+             rankings.forEach((cat, index) => {
+                const categoryId = cat.id;
+                const rating = ratings[categoryId] !== undefined ? ratings[categoryId] : 3;
+
+                const idealRankScore = idealScoreMap[categoryId];
+                const currentRatingScore = rating;
+                const itemGap = idealRankScore - currentRatingScore;
+                totalGap += itemGap;
+
+                // 判斷是否為「高理想排名 + 低滿意度」項目進行視覺強化
+                // 條件：理想排名在前 2 名 (index <= 1) 且滿意度 <= 2 分
+                let itemClassName = 'result-item';
+                if (index <= 1 && rating <= 2) {
+                   itemClassName += ' highlight-gap';
+                }
+
                 const item = document.createElement('div');
-                item.className = 'result-item';
+                item.className = itemClassName;
                 item.innerHTML = `
                     <div class="ranking-number">${index + 1}</div>
                     <span class="ranking-icon">${cat.icon}</span>
                     <span class="ranking-label">${cat.label}</span>
-                `;
-                rankingContainer.appendChild(item);
-            });
-
-            // 渲染評分結果
-            const ratingContainer = document.getElementById('rating-results');
-            ratingContainer.innerHTML = '';
-            categories.forEach(cat => {
-                const rating = ratings[cat.id] || 3;
-                const item = document.createElement('div');
-                item.className = 'result-item';
-                item.innerHTML = `
-                    <span class="ranking-icon">${cat.icon}</span>
-                    <span class="ranking-label">${cat.label}</span>
-                    <div style="margin-left: auto;">
-                        <span style="font-weight: bold; font-size: 18px;">${rating}</span>
-                        <span style="color: #6b7280;">/5</span>
+                    <div class="rating-display">
+                        ${rating}<span>/5</span>
                     </div>
                 `;
-                ratingContainer.appendChild(item);
+                integratedContainer.appendChild(item);
             });
 
+            // 生成並顯示建議
+            const suggestionArea = document.getElementById('suggestion-area');
+            suggestionArea.innerHTML = ''; // Clear previous suggestion
 
-        }
+            const suggestionBox = document.createElement('div');
+            suggestionBox.className = 'suggestion-box';
+
+            let suggestionContent = '';
+            let suggestionTitle = '✨ 分析建議 ✨';
 
 
-
-
-
-        function downloadReport() {
-            try {
-                
-                let report = `=== 美安招募訪談記錄 ===\n`;
-                report += `訪談對象：${intervieweeInfo.name}\n`;
-                report += `訪談日期：${intervieweeInfo.date}\n`;
-                report += `記錄時間：${new Date().toLocaleString('zh-TW')}\n\n`;
-                
-                report += `【理想工作重要性排序】\n`;
-                rankings.forEach((cat, index) => {
-                    report += `${index + 1}. ${cat.label}\n`;
-                });
-                
-                report += `\n【目前工作滿意度評分】\n`;
-                categories.forEach(cat => {
-                    const rating = ratings[cat.id] || '未評分';
-                    report += `${cat.label}：${rating}/5\n`;
-                });
-                
-
-                
-                const blob = new Blob([report], {type: 'text/plain;charset=utf-8'});
-                const url = URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = `訪談報告_${intervieweeInfo.name}_${intervieweeInfo.date}.txt`;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                URL.revokeObjectURL(url);
-
-            } catch (error) {
-                alert('匯出失敗，請稍後再試');
+            // === 第一段建議：基於第一個最看重項目的心理需求揭露 ===
+            const top1Category = rankings[0];
+            if (top1Category) {
+                 const top1SuggestionMap = {
+                     'salary': '你是一個非常務實的人，期待能夠讓生活變得更好，甚至有機會實現自己的目標及夢想。',
+                     'growth': '感受到自己不斷進步，成為一個更好的人，讓自己越來越肯定自己，是你深埋內心的使命。',
+                     'value': '你從來不吝於付出，對於能夠幫助更多人解決問題，或幫助這個世界能夠更好，充滿熱情。',
+                     'prospect': '對於趨勢和世界脈動，你總是目光如炬，有著獨到的想法和見解，一旦能夠擁有付諸實行的計畫將如虎添翼。',
+                     'promotion': '在群體內扮演恰如其分的角色，並且發揮影響力，得到別人的尊重與認同，是對具有領袖氣質的你的最佳描述。'
+                 };
+                 // 使用 div.suggestion-text 作為第一段
+                 suggestionContent += `<div class="suggestion-text">${top1SuggestionMap[top1Category.id] || '您對此非常重視。'}</div>`;
             }
+
+
+            // === 第二段建議：基於總滿意度分數的評語 ===
+            let overallRatingSuggestion = '';
+            if (totalRatingScore >= 5 && totalRatingScore <= 10) {
+                 overallRatingSuggestion = '工作其實同時也決定了生活樣態以及情緒價值，試著主動創造或尋求更能帶給自己成就感和幸福感的機會，能夠讓自己的每一步更篤定踏實。';
+            } else if (totalRatingScore >= 11 && totalRatingScore <= 15) {
+                 overallRatingSuggestion = '您的目前工作已經奠定了一些基礎，但同時也存在進一步提升滿意度的空間。識別並專注於那些能讓您感覺更好的領域，透過學習或調整，加速您朝向更理想的狀態前進。';
+            } else if (totalRatingScore >= 16 && totalRatingScore <= 20) {
+                 overallRatingSuggestion = '您已經找到了一份在多方面都能帶來價值感的工作。在此基礎上，思考如何將這份成功的模式和熱情擴展到更多領域，無論是提升現有工作的廣度或深度，都將為您帶來更多的成就感和回報。';
+            } else if (totalRatingScore >= 21 && totalRatingScore <= 25) {
+                 overallRatingSuggestion = '祝賀您實現了如此高的工作滿意度，這證明您在追求理想的道路上取得了非凡的成就！您現在可以將這份寶貴的經驗和熱情轉化為引領他人的力量，在更多層面創造屬於您的精彩篇章。';
+            }
+
+             if (overallRatingSuggestion) { // 只有生成了總評語才添加
+                 // 使用 div.suggestion-text 作為第二段
+                 suggestionContent += `<div class="suggestion-text">【您的目前工作總體滿意度：${totalRatingScore}/25】<br>${overallRatingSuggestion}</div>`;
+             }
+
+
+            if (suggestionContent) { // Only show suggestion box if there is content
+                 suggestionBox.innerHTML = `
+                      ${suggestionTitle ? `<div class="suggestion-title">${suggestionTitle}</div>` : ''}
+                      ${suggestionContent}
+                  `;
+                 suggestionArea.appendChild(suggestionBox);
+            } else {
+                // Fallback if somehow no suggestion is generated (shouldn't happen with current logic if rankings[0] exists)
+                 suggestionArea.innerHTML = `<div class="suggestion-box"><div class="suggestion-text">請完成理想工作重要性排序和目前工作滿意度評分，以查看分析結果。</div></div>`;
+                 suggestionTitle = '';
+            }
+
+
         }
 
-        function takeScreenshot() {
-            alert('請使用手機截圖功能儲存結果\n\n📱 iPhone: 同時按住電源鍵+音量上鍵\n📱 Android: 同時按住電源鍵+音量下鍵');
-        }
 
-		function resetSurvey() {
+        function resetSurvey() {
 			if (confirm('確定要重新開始嗎？目前的資料將會清除。')) {
 				currentPage = 0;
 				intervieweeInfo = { name: '', date: new Date().toISOString().split('T')[0] };
-				rankings = [...categories];
-				ratings = {
-					growth: 3,
-					promotion: 3,
+				rankings = [...categories]; // 重設排序
+				ratings = { // 重設評分 (根據 categories 的新順序初始化)
+					salary: 3,
+                    growth: 3,
 					value: 3,
 					prospect: 3,
-					salary: 3
+					promotion: 3
 				};
-        
+
         document.getElementById('interviewee-name').value = '';
-        document.getElementById('interview-date').value = new Date().toISOString().split('T')[0];
-        document.getElementById('start-btn').disabled = true;
-        
-        renderRankingList();
-        renderRatingList();
-        showPage(0);
+        document.getElementById('interview-date').value = new Date().toISOString().split('T')[0]; // 重設日期輸入框
+        document.getElementById('start-btn').disabled = true; // 禁用開始按鈕
+
+        renderRankingList(); // 重新渲染排序列表 (page 1)
+        renderRatingList(); // 重新渲染評分列表 (page 2)
+        initializeSliderStyles(); // 重新初始化滑桿樣式
+        updateProgressBar(0); // 重設進度條
+        showPage(0); // 返回到基本資料頁面
     }
 }
 
@@ -775,16 +1022,9 @@ function updateCurrentInfo() {
     }
 }
 
-// 初始化滑桿樣式
-document.addEventListener('DOMContentLoaded', function() {
-    const style = document.createElement('style');
-    style.textContent = `
-        .slider {
-            background: linear-gradient(to right, #4f46e5 0%, #4f46e5 0%, #e5e7eb 0%, #e5e7eb 100%);
-        }
-    `;
-    document.head.appendChild(style);
-});
+// 初始化所有滑桿的背景顏色 (頁面載入時執行一次)
+document.addEventListener('DOMContentLoaded', initializeSliderStyles);
+
       </script>
   </body>
   </html>
