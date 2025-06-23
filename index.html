@@ -776,70 +776,37 @@
                 rankingContainer.appendChild(item);
             });
 
-            // 渲染評分結果
-            const ratingContainer = document.getElementById('rating-results');
-            ratingContainer.innerHTML = '';
-            categories.forEach(cat => {
-                const rating = ratings[cat.id] || 3;
-                const item = document.createElement('div');
-                item.className = 'result-item';
-                item.innerHTML = `
-                    <span class="ranking-icon">${cat.icon}</span>
-                    <span class="ranking-label">${cat.label}</span>
-                    <div style="margin-left: auto;">
-                        <span style="font-weight: bold; font-size: 18px;">${rating}</span>
-                        <span style="color: #6b7280;">/5</span>
-                    </div>
-                `;
-                ratingContainer.appendChild(item);
-            });
+			// 渲染評分結果 (按照理想重要性排序)
+			const ratingContainer = document.getElementById('rating-results');
+			ratingContainer.innerHTML = '';
+			// *** 修改這裡：遍歷 rankings 陣列而不是 categories ***
+			rankings.forEach(cat => {
+				// 从 ratings 对象中根据 category.id 获取对应的评分
+				const rating = ratings[cat.id] !== undefined ? ratings[cat.id] : 3; // 使用 !== undefined 確保 0 是有效值，如果未來有 0 分的話
+				
+				// 可以根據評分高低稍微改變樣式，例如低分加點警示色（可選）
+				let itemClassName = 'result-item';
+				// 如果評分低於某個閾值 (例如 3 或 2)，可以考慮加一個 class
+				// if (rating <= 2) {
+				//    itemClassName += ' low-satisfaction'; // 需要在 CSS 中定義 low-satisfaction 樣式
+				// }
+
+				const item = document.createElement('div');
+				item.className = itemClassName; // 使用計算出來的 class name
+				item.innerHTML = `
+					<span class="ranking-icon">${cat.icon}</span>
+					<span class="ranking-label">${cat.label}</span>
+					<div style="margin-left: auto;">
+						<span style="font-weight: bold; font-size: 18px;">${rating}</span>
+						<span style="color: #6b7280;">/5</span>
+					</div>
+				`;
+				ratingContainer.appendChild(item);
+			});
 
 
         }
 
-
-
-
-<!--
-        function downloadReport() {
-            try {
-                
-                let report = `=== 美安招募訪談記錄 ===\n`;
-                report += `訪談對象：${intervieweeInfo.name}\n`;
-                report += `訪談日期：${intervieweeInfo.date}\n`;
-                report += `記錄時間：${new Date().toLocaleString('zh-TW')}\n\n`;
-                
-                report += `【理想工作重要性排序】\n`;
-                rankings.forEach((cat, index) => {
-                    report += `${index + 1}. ${cat.label}\n`;
-                });
-                
-                report += `\n【目前工作滿意度評分】\n`;
-                categories.forEach(cat => {
-                    const rating = ratings[cat.id] || '未評分';
-                    report += `${cat.label}：${rating}/5\n`;
-                });
-                
-
-                
-                const blob = new Blob([report], {type: 'text/plain;charset=utf-8'});
-                const url = URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = `訪談報告_${intervieweeInfo.name}_${intervieweeInfo.date}.txt`;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                URL.revokeObjectURL(url);
-
-            } catch (error) {
-                alert('匯出失敗，請稍後再試');
-            }
-        }
--->
-        function takeScreenshot() {
-            alert('請使用手機截圖功能儲存結果\n\n📱 iPhone: 同時按住電源鍵+音量上鍵\n📱 Android: 同時按住電源鍵+音量下鍵');
-        }
 
 		function resetSurvey() {
 			if (confirm('確定要重新開始嗎？目前的資料將會清除。')) {
