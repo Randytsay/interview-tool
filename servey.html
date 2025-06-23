@@ -24,6 +24,10 @@
     <!-- LINE 特別支援 -->
     <meta property="og:site_name" content="訪談表">
     <meta name="description" content="探索理想工作與現實差距！">
+
+    <!-- 引入 SortableJS 函式庫 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+
     <style>
         * {
             margin: 0;
@@ -36,6 +40,7 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
+             font-size: 16px; /* Base font size for desktop */
         }
 
         .container {
@@ -82,6 +87,7 @@
             font-weight: 600;
             margin-bottom: 8px;
             color: #374151;
+             font-size: 1rem; /* Base size */
         }
 
         .form-input {
@@ -187,7 +193,18 @@
             border-radius: 12px;
             margin-bottom: 12px;
             transition: all 0.3s;
+            cursor: grab; /* Indicate draggable */
         }
+        /* Style when dragging */
+        .ranking-item.sortable-chosen {
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            opacity: 0.8;
+            transform: rotate(2deg); /* Add a slight rotation effect */
+        }
+         .ranking-item.sortable-ghost {
+             opacity: 0.2; /* Make ghost item semi-transparent */
+         }
+
 
         .ranking-item:hover {
             border-color: #4f46e5;
@@ -198,6 +215,8 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            /* Allow left section to grow, pushing controls to the right */
+             flex-grow: 1;
         }
 
         .ranking-number {
@@ -220,13 +239,12 @@
         .ranking-label {
             font-weight: 600;
             color: #374151;
-			font-size: 22px;
+			font-size: 22px; /* Base size */
         }
 
+        /* Hide the arrow controls when using drag and drop */
         .ranking-controls {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
+            display: none; /* <--- Hide arrow controls */
         }
 
         .arrow-btn {
@@ -269,7 +287,7 @@
             gap: 8px;
             font-weight: 600;
             color: #374151;
-			font-size: 22px;
+			font-size: 22px; /* Base size */
         }
 
         .rating-value {
@@ -316,7 +334,7 @@
         .slider-labels {
             display: flex;
             justify-content: space-between;
-            font-size: 12px;
+            font-size: 12px; /* Base size */
             color: #6b7280;
             margin-top: 8px;
         }
@@ -331,7 +349,7 @@
 
         .results-title {
             font-weight: bold;
-            font-size: 18px;
+            font-size: 18px; /* Base size */
             margin-bottom: 12px;
             text-align: center;
         }
@@ -347,19 +365,20 @@
             margin-bottom: 8px;
             transition: all 0.3s;
             border-left: 4px solid transparent; /* Default border */
+             font-size: 16px; /* Base size for result item text */
         }
 
         /* Style for integrated rating display */
         .result-item .rating-display {
             margin-left: auto;
             font-weight: bold;
-            font-size: 28px;
+            font-size: 28px; /* Base size - 加大數字的字體大小 */
             color: #4f46e5;
             flex-shrink: 0;
         }
         .result-item .rating-display span {
             color: #6b7280;
-            font-size: 14px;
+            font-size: 14px; /* Base size - /5 的字體大小不變 */
             font-weight: normal;
         }
 
@@ -387,11 +406,12 @@
              color: #0369a1; /* Darker blue title */
              margin-bottom: 8px;
              text-align: center; /* Keep title centered */
+             font-size: 18px; /* Base size */
         }
 
         .suggestion-box .suggestion-text {
              color: #075985; /* Text color */
-             font-size: 15px;
+             font-size: 15px; /* Base size */
              line-height: 1.5;
              margin-bottom: 12px; /* Add more margin below each paragraph */
         }
@@ -409,7 +429,7 @@
 
         .info-text {
             text-align: center;
-            font-size: 12px;
+            font-size: 12px; /* Base size */
             color: #6b7280;
             margin-top: 16px;
         }
@@ -436,6 +456,12 @@
 /* 手機版完整優化 */
 @media (max-width: 768px) {
 
+    /* Increase base font size for mobile */
+    body {
+        font-size: 18px; /* Increased base font size for mobile */
+    }
+
+
     #page-results .progress-bar {
         display: none;
     }
@@ -445,14 +471,27 @@
         padding: 16px;
     }
 
-    #page-results .card-title {
-        font-size: 1.3rem;
+    .card-title {
+        font-size: 1.5rem; /* Keep large title */
+    }
+
+    .card-subtitle {
+         font-size: 1.1rem; /* Increased subtitle size */
+         opacity: 1; /* Ensure full visibility */
     }
 
     /* 縮小內容區域間距 */
-    #page-results .card-content {
+    .card-content {
         padding: 16px;
     }
+
+    .form-label {
+         font-size: 1.1rem; /* Increased form label size */
+    }
+     .form-input {
+         font-size: 18px; /* Increased input text size for readability */
+     }
+
 
     .results-section {
         padding: 12px;
@@ -460,51 +499,71 @@
     }
 
     .results-title {
-        font-size: 22px;
+        font-size: 20px; /* Increased results section title */
         margin-bottom: 8px;
     }
 
     /* 緊湊的結果項目 */
     .result-item {
-        padding: 6px 8px;
-        margin-bottom: 4px;
-        font-size: 13px;
-        gap: 8px; /* Reduce gap */
+        padding: 8px 10px; /* Slightly more padding */
+        margin-bottom: 6px;
+        font-size: 16px; /* Increased base size for result item text */
+        gap: 10px; /* Slightly larger gap */
+    }
+
+    .ranking-item {
+         padding: 12px 16px; /* Increased padding for drag items */
+         margin-bottom: 10px;
     }
 
     .ranking-number {
-        width: 24px;
-        height: 24px;
-        font-size: 11px;
+        width: 30px; /* Slightly larger number circle */
+        height: 30px;
+        font-size: 13px; /* Increased number font */
     }
 
     .ranking-icon {
-        font-size: 16px;
+        font-size: 20px; /* Increased icon size */
     }
 
     .ranking-label {
-        font-size: 16px; /* Adjust label size */
+        font-size: 18px; /* Increased project label size */
     }
 
+    .rating-item {
+        padding: 16px; /* Increased padding for rating items */
+    }
+     .rating-label {
+         font-size: 18px; /* Increased rating label size */
+     }
+     .rating-value {
+          font-size: 22px; /* Increased rating value size */
+     }
+     .slider-labels {
+          font-size: 14px; /* Increased slider label size */
+     }
+
+
     .result-item .rating-display {
-        font-size: 22px; /* Adjust rating size */
+        font-size: 24px; /* Increased result rating number size */
     }
      .result-item .rating-display span {
-         font-size: 12px; /* Adjust "/5" size */
+         font-size: 14px; /* Increased result rating /5 size */
      }
+
 
      /* Adjust suggestion box for mobile */
     .suggestion-box {
-        padding: 12px;
-        margin-top: 16px;
+        padding: 16px; /* Increased padding */
+        margin-top: 20px;
     }
     .suggestion-box .suggestion-title {
-        font-size: 20px;
-        margin-bottom: 6px;
+        font-size: 18px; /* Increased suggestion title size */
+        margin-bottom: 10px;
     }
     .suggestion-box .suggestion-text {
-        font-size: 16px;
-        margin-bottom: 8px; /* Adjust margin for mobile */
+        font-size: 16px; /* Increased suggestion text size */
+        margin-bottom: 12px;
     }
      .suggestion-box .suggestion-text:last-child {
          margin-bottom: 0;
@@ -513,22 +572,27 @@
 
     /* 緊湊的按鈕 */
     .btn-group {
-        margin-bottom: 8px;
-        gap: 6px;
+        margin-bottom: 10px;
+        gap: 8px;
     }
 
     .btn {
-        padding: 8px 12px;
-        font-size: 13px;
+        padding: 10px 16px; /* Increased button padding */
+        font-size: 16px; /* Increased button text size */
     }
 
     /* 底部資訊文字縮小 */
     .info-text {
-        font-size: 14px;
-        margin-top: 8px;
+        font-size: 13px; /* Increased info text size */
+        margin-top: 12px;
     }
     .highlight-name {
-        font-size: 1.2em;
+        font-size: 1.3em; /* Slightly increased highlight name size */
+    }
+
+    /* Disable drag handle pointer for arrows */
+    .ranking-item .ranking-controls {
+         cursor: default; /* Or auto */
     }
 }
 
@@ -570,11 +634,15 @@
             </div>
             <div class="card-header">
                 <div class="card-title">💭 <span class="highlight">理想</span>工作重要性排序</div>
-                <div class="card-subtitle">請用上下箭頭調整順序 (上方最重要 → 下方最不重要)</div>
+                <div class="card-subtitle">請用上下拖拉調整順序 (上方最重要 → 下方最不重要)</div>
             </div>
             <div class="card-content">
-                <div id="ranking-list"></div>
-                <div class="info-text">💡 提示：點擊上下箭頭可調整順序</div>
+                <div id="ranking-list">
+                    <!-- Ranking items will be generated here by JS -->
+                </div>
+                <div class="info-text">💡 提示：按住並拖拉項目即可調整順序</div>
+                 <!-- Removed arrow button hints -->
+                 <!-- <div class="info-text">💡 提示：點擊上下箭頭可調整順序</div> -->
                 <button id="next-to-rating" class="btn" style="margin-top: 20px;">
                     下一題 →
                 </button>
@@ -630,7 +698,7 @@
                 <!-- 整合顯示：理想重要性排序下的目前滿意度 -->
                 <div class="results-section">
                     <div class="results-title">
-                        💭理想(左) 與 📊現實(右) 比較
+                        💭理想 (左邊數字) 與 📊現實 (右邊評分) 比較
                     </div>
                     <div id="integrated-results">
                         <!-- 這裡將由 JavaScript 填充整合後的結果 -->
@@ -639,7 +707,9 @@
                     <div id="suggestion-area">
                          <!-- 這裡將由 JavaScript 填充建議 -->
                     </div>
-
+                     <div class="info-text" style="margin-top: 20px;">
+                         💡 顏色提示：理想重要性高 (前兩名) 且滿意度較低 (<= 2分) 的項目會以黃色標示。
+                     </div>
                 </div>
 
                 <!-- Removed download/screenshot buttons -->
@@ -648,17 +718,13 @@
                     🔄 開始新的訪談
                 </button>
                 <!-- Removed screenshot hint -->
-                <!--
-                 <div class="info-text" style="margin-top: 12px;">
-                    請直接截圖儲存結果。
-                 </div>
-                -->
             </div>
         </div>
 
         <div class="info-text" id="current-info"></div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
     <script>
         // 資料結構 (已調整順序，合理報酬放第一個)
         const categories = [
@@ -680,6 +746,8 @@
 			promotion: 3
 		};
 
+        let sortableInstance = null; // Variable to store the Sortable instance
+
         // 初始化
         document.addEventListener('DOMContentLoaded', function() {
             // 設定預設日期
@@ -693,6 +761,8 @@
 
             // 初始化滑桿樣式 (确保在元素渲染后执行)
             initializeSliderStyles();
+             // Initialize SortableJS after rendering the list for the first time
+            initializeSortable();
         });
 
         function bindEvents() {
@@ -727,6 +797,8 @@
 
         function startSurvey() {
             showPage(1);
+             // Re-initialize SortableJS whenever entering the ranking page
+            initializeSortable();
         }
 
         function showPage(pageNum) {
@@ -737,6 +809,12 @@
             }
             // 結果頁面單獨處理，因為 ID 不同
             document.getElementById('page-results').classList.add('hidden');
+
+             // Destroy Sortable instance when leaving ranking page to prevent issues
+             if (sortableInstance && currentPage === 1) {
+                 sortableInstance.destroy();
+                 sortableInstance = null;
+             }
 
 
             // 顯示目標頁面
@@ -788,35 +866,78 @@
             rankings.forEach((category, index) => {
                 const item = document.createElement('div');
                 item.className = 'ranking-item';
+                 // Store category id in a data attribute for easy retrieval after sorting
+                 item.dataset.categoryId = category.id;
                 item.innerHTML = `
                     <div class="ranking-left">
                         <div class="ranking-number">${index + 1}</div>
                         <span class="ranking-icon">${category.icon}</span>
                         <span class="ranking-label">${category.label}</span>
                     </div>
-                    <div class="ranking-controls">
-                        <button class="arrow-btn" onclick="moveItem(${index}, 'up')" ${index === 0 ? 'disabled' : ''}>
-                            ▲
-                        </button>
-                        <button class="arrow-btn" onclick="moveItem(${index}, 'down')" ${index === rankings.length - 1 ? 'disabled' : ''}>
-                            ▼
-                        </button>
-                    </div>
+                    <!-- Arrows removed from HTML -->
                 `;
                 container.appendChild(item);
             });
-        }
-
-        function moveItem(index, direction) {
-            const newRankings = [...rankings];
-            const targetIndex = direction === 'up' ? index - 1 : index + 1;
-
-            if (targetIndex >= 0 && targetIndex < newRankings.length) {
-                [newRankings[index], newRankings[targetIndex]] = [newRankings[targetIndex], newRankings[index]];
-                rankings = newRankings;
-                renderRankingList();
+             // Re-initialize SortableJS after rendering
+            // Only call initializeSortable here if this render happens when the ranking page is visible
+            if (currentPage === 1) {
+                 initializeSortable();
             }
         }
+
+        // Removed the moveItem function as sorting is handled by SortableJS
+
+
+        function initializeSortable() {
+            const list = document.getElementById('ranking-list');
+             // Prevent multiple Sortable instances on the same element
+             if (sortableInstance && sortableInstance.el === list) {
+                 return;
+             }
+
+            if (list) {
+                 sortableInstance = Sortable.create(list, {
+                     animation: 150,
+                     ghostClass: 'sortable-ghost', // Class name for the drop placeholder
+                     chosenClass: 'sortable-chosen', // Class name for the chosen item
+                     dragClass: 'sortable-drag',   // Class name for the dragging item
+                     // filter: '.ranking-controls', // Optional: Prevent dragging by controls if they were visible
+                     // handle: '.ranking-left', // Optional: Restrict drag handle to the left area
+                     onEnd: function (evt) {
+                         // Update the internal rankings array based on the new DOM order
+                         const newOrder = [];
+                         list.querySelectorAll('.ranking-item').forEach(item => {
+                             const categoryId = item.dataset.categoryId;
+                              const category = categories.find(cat => cat.id === categoryId);
+                              if (category) {
+                                  newOrder.push(category);
+                              }
+                         });
+                         rankings = newOrder;
+
+                         // After sorting, re-render the list to update the ranking numbers (1, 2, 3...)
+                         updateRankingNumbers();
+
+                         console.log('New rankings order:', rankings.map(cat => cat.id)); // For debugging
+                     }
+                 });
+                 console.log('SortableJS initialized.'); // For debugging
+            } else {
+                 console.error('Ranking list element not found for SortableJS initialization.');
+            }
+        }
+
+         // Function to update the ranking numbers displayed next to the items
+         function updateRankingNumbers() {
+             const listItems = document.querySelectorAll('#ranking-list .ranking-item');
+             listItems.forEach((item, index) => {
+                 const rankingNumberElement = item.querySelector('.ranking-number');
+                 if (rankingNumberElement) {
+                     rankingNumberElement.textContent = index + 1;
+                 }
+             });
+         }
+
 
         function renderRatingList() {
             const container = document.getElementById('rating-list');
@@ -891,7 +1012,7 @@
                 totalRatingScore += ratings[categoryId];
             }
 
-            // 計算總落差分數 (保留計算，雖然建議主要基於理想第一項和總滿意度)
+            // 計算總落差分數 (保留計算)
             let totalGap = 0;
             const idealScoreMap = {};
              // Ideal rank score: 1st = 5, 2nd = 4, ..., 5th = 1
@@ -943,29 +1064,29 @@
             const top1Category = rankings[0];
             if (top1Category) {
                  const top1SuggestionMap = {
-                     'salary': '你是一個非常務實的人，期待能夠讓生活變得更好，甚至有機會實現自己的目標及夢想。',
+                     'salary': '您是一個非常務實的人，期待能夠讓生活變得更好，甚至有機會實現自己的目標及夢想。',
                      'growth': '感受到自己不斷進步，成為一個更好的人，讓自己越來越肯定自己，是你深埋內心的使命。',
                      'value': '你從來不吝於付出，對於能夠幫助更多人解決問題，或幫助這個世界能夠更好，充滿熱情。',
                      'prospect': '對於趨勢和世界脈動，你總是目光如炬，有著獨到的想法和見解，一旦能夠擁有付諸實行的計畫將如虎添翼。',
                      'promotion': '在群體內扮演恰如其分的角色，並且發揮影響力，得到別人的尊重與認同，是對具有領袖氣質的你的最佳描述。'
                  };
                  // 使用 div.suggestion-text 作為第一段
-                 suggestionContent += `<div class="suggestion-text">${top1SuggestionMap[top1Category.id] || '您對此非常重視。'}</div>`;
+                 suggestionContent += `<div class="suggestion-text">針對您最看重的『${top1Category.label}』(${top1Category.icon})，這可能反映出：<br>${top1SuggestionMap[top1Category.id] || '您對此非常重視。'}</div>`;
             }
 
 
             // === 第二段建議：基於總滿意度分數的評語 ===
             let overallRatingSuggestion = '';
+            // 根據總滿意度分數選擇評語
             if (totalRatingScore >= 5 && totalRatingScore <= 10) {
-                 overallRatingSuggestion = '工作其實同時也決定了生活樣態以及情緒價值，試著主動創造或尋求更能帶給自己成就感和幸福感的機會，能夠讓自己的每一步更篤定踏實。';
+                 overallRatingSuggestion = '從您的整體評估來看，目前工作在許多面向可能與您的期待有較大落差。工作其實同時也決定了生活樣態以及情緒價值，試著主動創造或尋求更能帶給自己成就感和幸福感的機會，能夠讓自己的每一步更篤定踏實。';
             } else if (totalRatingScore >= 11 && totalRatingScore <= 15) {
-                 overallRatingSuggestion = '您的目前工作已經奠定了一些基礎，但同時也存在進一步提升滿意度的空間。識別並專注於那些能讓您感覺更好的領域，透過學習或調整，加速您朝向更理想的狀態前進。';
+                 overallRatingSuggestion = '您的目前工作滿意度在中等偏低範圍。這可能表示在某些面向您感受到一些挑戰。回顧哪些部分最需要調整或加強，是平衡工作與生活、提升幸福感的關鍵。';
             } else if (totalRatingScore >= 16 && totalRatingScore <= 20) {
-                 overallRatingSuggestion = '您已經找到了一份在多方面都能帶來價值感的工作。在此基礎上，思考如何將這份成功的模式和熱情擴展到更多領域，無論是提升現有工作的廣度或深度，都將為您帶來更多的成就感和回報。';
+                 overallRatingSuggestion = '您的目前工作在許多方面都達到了不錯的滿意度。在已經做得好的基礎上，探索如何將優勢發揮到極致，或針對少數仍有進步空間的面向進行微調，將能讓您更接近理想的工作狀態。';
             } else if (totalRatingScore >= 21 && totalRatingScore <= 25) {
-                 overallRatingSuggestion = '祝賀您實現了如此高的工作滿意度，這證明您在追求理想的道路上取得了非凡的成就！您現在可以將這份寶貴的經驗和熱情轉化為引領他人的力量，在更多層面創造屬於您的精彩篇章。';
+                 overallRatingSuggestion = '恭喜您！您目前的工作與理想狀態有著高度的契合與滿意度。持續保持這樣正向的動能，並思考如何將這份熱情與成就感延伸到更多領域，將為您的生活帶來更多光彩！';
             }
-
              if (overallRatingSuggestion) { // 只有生成了總評語才添加
                  // 使用 div.suggestion-text 作為第二段
                  suggestionContent += `<div class="suggestion-text">【您的目前工作總體滿意度：${totalRatingScore}/25】<br>${overallRatingSuggestion}</div>`;
