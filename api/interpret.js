@@ -1,76 +1,113 @@
-// 檔案路徑: /api/interpret.js (新版 - 適用於 OpenRouter)
+// 檔案路徑: /api/interpret.js (最終版 - 更新為 gemini-2.0-flash)
 
+// Helper Function 1: 呼叫 Google Gemini API
+async function callGoogleApi(prompt, apiKey) {
+  // --- 唯一的修改點在這裡 ---
+  // 根據您提供的最新資訊，更新 Google API 網址
+  const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+  
+  const response = await fetch(API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      contents: [{ parts: [{ text: prompt }] }],
+    }),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Google API Error (${response.status}): ${errorText}`);
+  }
+
+  const result = await response.json();
+  const messageContent = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+  if (!messageContent) {
+    throw new Error("Google API response format is invalid or empty.");
+  }
+  return messageContent.trim();
+}
+
+// Helper Function 2: 呼叫 OpenRouter API (此函式無需變動)
+async function callOpenRouterApi(prompt, apiKey) {
+  const API_URL = "https://openrouter.ai/api/v1/chat/completions";
+  
+  const response = await fetch(API_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${apiKey}`,
+      'HTTP-Referer': process.env.VERCEL_URL || 'http://localhost:3000',
+      'X-Title': encodeURIComponent('工作的理想與現實'),
+    },
+    body: JSON.stringify({
+      model: "deepseek/deepseek-chat-v3-0324:free",
+      messages: [{ "role": "user", "content": prompt }],
+    }),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`OpenRouter API Error (${response.status}): ${errorText}`);
+  }
+
+  const result = await response.json();
+  const messageContent = result?.choices?.[0]?.message?.content;
+
+  if (!messageContent) {
+    throw new Error("OpenRouter API response format is invalid or empty.");
+  }
+  return messageContent.trim();
+}
+
+
+// --- 主處理函式 (Main Handler) (此函式無需變動) ---
 export default async function handler(request, response) {
-  // 安全性檢查：只允許 POST 請求
   if (request.method !== 'POST') {
     return response.status(405).json({ message: 'Only POST requests are allowed' });
   }
 
-  // 從前端傳來的請求中，讀取 prompt 內容
   const { prompt } = request.body;
   if (!prompt) {
-    return response.status(400).json({ message: 'Prompt is required in the request body' });
+    return response.status(400).json({ message: 'Prompt is required' });
   }
 
-  // --- 修改開始 (1/4): 改為讀取 OpenRouter 的金鑰 ---
-  const API_KEY = process.env.OPENROUTER_API_KEY;
-  if (!API_KEY) {
-    // 如果 Vercel 環境變數沒設定，提前回傳錯誤，方便除錯
-    return response.status(500).json({ message: 'OPENROUTER_API_KEY is not set on the server.' });
-  }
+  const geminiApiKey = process.env.GEMINI_API_KEY;
+  const openRouterApiKey = process.env.OPENROUTER_API_KEY;
 
-  // --- 修改開始 (2/4): 更新 API 網址 ---
-  const API_URL = "https://openrouter.ai/api/v1/chat/completions";
-
+  // --- 備援邏輯開始 ---
   try {
-    // 代替前端，由我們的後端伺服器去呼叫 OpenRouter API
-    const openRouterResponse = await fetch(API_URL, {
-      method: 'POST',
-      // --- 修改開始 (3/4): 更新 Headers 和 Body ---
-      headers: {
-        'Content-Type': 'application/json',
-        // OpenRouter 使用 Bearer Token 進行驗證
-        'Authorization': `Bearer ${API_KEY}`,
-        // 以下為 OpenRouter 建議的選填標頭，有助於他們進行排名和追蹤
-        // 請將 YOUR_SITE_URL 和 YOUR_SITE_NAME 換成您自己的資訊
-        'HTTP-Referer': 'https://interview-tool-eight.vercel.app//', 
-        'X-Title': encodeURIComponent('工作的理想與現實'),
-      },
-      body: JSON.stringify({
-        // 指定您想使用的模型
-        // "model": "deepseek/deepseek-r1-0528:free", 
-        "model": "deepseek/deepseek-chat-v3-0324:free",
-        // 訊息格式改為 OpenRouter/OpenAI 的標準格式
-        "messages": [
-          { "role": "user", "content": prompt }
-        ]
-      }),
-      // --- 修改結束 (3/4) ---
-    });
-
-    if (!openRouterResponse.ok) {
-      const errorText = await openRouterResponse.text();
-      // 拋出更詳細的錯誤，方便除錯
-      throw new Error(`OpenRouter API Error (${openRouterResponse.status}): ${errorText}`);
-    }
-
-    const result = await openRouterResponse.json();
-
-    // --- 修改開始 (4/4): 更新解析回傳結果的方式 ---
-    let aiText = "抱歉，AI 回應的格式有誤或為空，暫時無法解析。";
-    // 使用可選串連 (Optional Chaining `?.`) 來安全地存取深層物件
-    const messageContent = result?.choices?.[0]?.message?.content;
-    if (messageContent) {
-       aiText = messageContent.trim();
-    }
-    // --- 修改結束 (4/4) ---
+    // Plan A: 優先嘗試 Google Gemini API
+    console.log("Attempting to call Google Gemini API (Plan A)...");
+    if (!geminiApiKey) throw new Error("GEMINI_API_KEY is not set.");
     
-    // 成功後，將 AI 的文字回傳給前端
-    response.status(200).json({ text: aiText });
+    const aiText = await callGoogleApi(prompt, geminiApiKey);
+    console.log("Google Gemini API call successful.");
+    return response.status(200).json({ text: aiText });
 
-  } catch (error) {
-    // 如果過程中發生任何錯誤，記錄錯誤並回傳一個伺服器錯誤的訊息給前端
-    console.error('Error in interpret function:', error);
-    response.status(500).json({ message: `An internal server error occurred: ${error.message}` });
+  } catch (googleError) {
+    // 如果 Plan A 失敗，在日誌中記錄錯誤，然後執行 Plan B
+    console.warn("Google Gemini API (Plan A) failed:", googleError.message);
+    console.log("Fallback to OpenRouter API (Plan B)...");
+
+    try {
+      // Plan B: 嘗試 OpenRouter API
+      if (!openRouterApiKey) throw new Error("OPENROUTER_API_KEY is not set.");
+      
+      const aiText = await callOpenRouterApi(prompt, openRouterApiKey);
+      console.log("OpenRouter API call successful.");
+      return response.status(200).json({ text: aiText });
+
+    } catch (openRouterError) {
+      // 如果 Plan B 也失敗，回傳最終的錯誤訊息
+      console.error("OpenRouter API (Plan B) also failed:", openRouterError.message);
+      return response.status(500).json({
+        message: "Both primary and fallback AI services failed.",
+        error: {
+          google: googleError.message,
+          openrouter: openRouterError.message,
+        },
+      });
+    }
   }
 }
