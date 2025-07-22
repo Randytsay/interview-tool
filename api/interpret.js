@@ -33,7 +33,7 @@ export default async function handler(request, response) {
         'Authorization': `Bearer ${API_KEY}`,
         // 以下為 OpenRouter 建議的選填標頭，有助於他們進行排名和追蹤
         // 請將 YOUR_SITE_URL 和 YOUR_SITE_NAME 換成您自己的資訊
-        'HTTP-Referer': 'https://interview-tool-7t28q2xa6-randys-projects-e8f322ae.vercel.app/', // 例如: https://interview-tool.vercel.app
+        'HTTP-Referer': 'https://interview-tool-eight.vercel.app//', 
         'X-Title': '工作的理想與現實', // 您的網站標題
       },
       body: JSON.stringify({
