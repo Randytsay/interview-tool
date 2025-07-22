@@ -838,12 +838,11 @@
 
         return `
 		你是一位資深的職場心理分析師和創業導師。根據以下數據進行深度心理分析：
-	
 		**分析數據：**
 		- 受訪者姓名：${intervieweeInfo.name}
-		- 理想工作重要性排序：{rankings}
-		- 目前工作滿意度評分：{ratings}
-		- 總滿意度：{totalScore}/25
+		- 理想工作重要性排序：${rankings.map(cat => cat.label).join(' > ')}
+		- 目前工作滿意度評分：${Object.entries(ratings).map(([id, score]) => `${categories.find(cat => cat.id === id).label}: ${score}/5`).join(', ')}
+		- 總滿意度：${totalRatingScore}/25	
 		
 		**分析指引：**
 		1. **深層動機解析**：從排序看出此人的核心驅動力和內在渴望，用溫暖但犀利的語調點出他們可能自己都沒意識到的深層需求		
@@ -858,7 +857,8 @@
 		- 在最後自然地種下「也許你需要的是更大的舞台」的種子
 		
 		請用繁體中文，約100-200字，分3-4個段落呈現。
-            你是一位資深的職涯顧問與創業導師。請以專業、有同理心且具啟發性的口吻，分析以下這位名叫「${intervieweeInfo.name}」的評估結果。
+  		使用markdown格式，讓整體易讀，重點以粗體字表示。
+
 
         `;
     }
