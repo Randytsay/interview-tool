@@ -1215,18 +1215,32 @@
         }
 
 
-        function resetSurvey() {
-			if (confirm('確定要重新開始嗎？目前的資料將會清除。')) {
-				currentPage = 0;
-				intervieweeInfo = { name: '', date: new Date().toISOString().split('T')[0] };
-				rankings = [...categories]; // 重設排序
-				ratings = { // 重設評分 (根據 categories 的新順序初始化)
-					salary: 3,
-                    growth: 3,
-					value: 3,
-					prospect: 3,
-					promotion: 3
-				};
+function resetSurvey() {
+    if (confirm('確定要重新開始嗎？目前的資料將會清除。')) {
+        currentPage = 0;
+        intervieweeInfo = { name: '', date: new Date().toISOString().split('T')[0] };
+        rankings = [...categories]; // 重設排序
+        ratings = { // 重設評分
+            salary: 3,
+            growth: 3,
+            value: 3,
+            prospect: 3,
+            promotion: 3
+        };
+
+        // --- 新增開始：重置 AI 解讀區塊 ---
+        // 找到 AI 結果的區塊
+        const aiArea = document.getElementById('ai-results-area');
+        const aiContent = document.getElementById('ai-content');
+
+        // 確認元素存在後再操作，避免錯誤
+        if (aiArea) {
+            aiArea.style.display = 'none'; // 將整個區塊重新隱藏
+        }
+        if (aiContent) {
+            aiContent.textContent = ''; // 清空裡面的文字
+        }
+        // --- 新增結束 ---
 
         document.getElementById('interviewee-name').value = '';
         document.getElementById('interview-date').value = new Date().toISOString().split('T')[0]; // 重設日期輸入框
