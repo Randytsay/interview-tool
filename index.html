@@ -605,7 +605,7 @@
     
     #ai-content p {
         margin-bottom: 8px !important;
-        font-size: 15px;
+        font-size: 18px;
     }
     
     #ai-content strong {
@@ -781,13 +781,17 @@
             aiResultsArea.style.marginTop = '20px';
             aiResultsArea.innerHTML = `
                 <div class="results-title">AI 深度解讀</div>
-                <div id="ai-content" style="padding: 10px; text-align: left; line-height: 1.6; white-space: pre-wrap;">
-                    </div>
+            	<div id="ai-content" style="padding: 10px; text-align: left; line-height: 1.6;">
+            	</div>
             `;
-            // 將 AI 顯示區插入到建議區之後
-            suggestionArea.parentNode.insertBefore(aiResultsArea, suggestionArea.nextSibling);
-        }
-    }
+        // 將 AI 顯示區插入到建議區之後
+	        if (suggestionArea.nextSibling) {
+	             suggestionArea.parentNode.insertBefore(aiResultsArea, suggestionArea.nextSibling);
+	        } else {
+	             suggestionArea.parentNode.appendChild(aiResultsArea);
+	        }
+	    }
+	}
 
     document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('interview-date').value = new Date().toISOString().split('T')[0];
