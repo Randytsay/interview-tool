@@ -800,99 +800,176 @@
     }
 
     // --- 新增：按下按鈕後，準備資料並呼叫後端 ---
-    function getAIInterpretation() {
-        const aiArea = document.getElementById('ai-results-area');
-        const aiContent = document.getElementById('ai-content');
-        const aiBtn = document.getElementById('ai-interpret-btn');
-        
-        // 顯示讀取中...
-        aiArea.style.display = 'block';
-        aiContent.textContent = 'AI 正在深度分析中，請稍候...';
-        aiBtn.disabled = true; // 防止重複點擊
-        aiBtn.textContent = '分析中...';
+	function getAIInterpretation() {
+	    const aiArea = document.getElementById('ai-results-area');
+	    const aiContent = document.getElementById('ai-content');
+	    const aiBtn = document.getElementById('ai-interpret-btn');
+	    
+	    // 顯示分析區域
+	    aiArea.style.display = 'block';
+	    aiBtn.disabled = true;
+	    aiBtn.innerHTML = '🤖 分析中...';
+	    
+	    // 創建動態載入效果
+	    aiContent.innerHTML = `
+	        <div style="text-align: center; padding: 30px 20px;">
+	            <div style="font-size: 24px; margin-bottom: 15px;">🧠</div>
+	            <div id="ai-thinking-text" style="font-size: 18px; color: #4f46e5; font-weight: 600; margin-bottom: 20px;">
+	                AI 正在深度分析你的職涯特質
+	            </div>
+	            <div id="loading-dots" style="font-size: 24px; color: #4f46e5;">
+	                <span>●</span><span>●</span><span>●</span>
+	            </div>
+	        </div>
+	        <style>
+	            #loading-dots span {
+	                animation: bounce 1.4s infinite ease-in-out both;
+	                display: inline-block;
+	                margin: 0 2px;
+	            }
+	            #loading-dots span:nth-child(1) { animation-delay: -0.32s; }
+	            #loading-dots span:nth-child(2) { animation-delay: -0.16s; }
+	            @keyframes bounce {
+	                0%, 80%, 100% { 
+	                    transform: scale(0.8);
+	                    opacity: 0.5;
+	                }
+	                40% { 
+	                    transform: scale(1.2);
+	                    opacity: 1;
+	                }
+	            }
+	        </style>
+	    `;
+	    
+	    const thinkingTexts = [
+	        'AI 正在深度分析你的職涯特質',
+	        '解讀你內心真正的渴望',
+	        '挖掘隱藏的職場優勢',
+	        '生成專屬的洞察報告'
+	    ];
+	    
+	    let textIndex = 0;
+	    const textInterval = setInterval(() => {
+	        textIndex = (textIndex + 1) % thinkingTexts.length;
+	        const thinkingElement = document.getElementById('ai-thinking-text');
+	        if (thinkingElement) {
+	            thinkingElement.textContent = thinkingTexts[textIndex];
+	        }
+	    }, 2000);
+	    
+	    // 準備資料並呼叫 API
+	    setTimeout(() => {
+	        // 1. 整理要給 AI 的資料
+	        let idealRankingText = "理想工作重要性排序：\n";
+	        rankings.forEach((cat, index) => {
+	            idealRankingText += `${index + 1}. ${cat.label} (${cat.icon})\n`;
+	        });
+	
+	        let realityRatingText = "目前工作滿意度評分 (1分很不滿意, 5分很滿意)：\n";
+	        rankings.forEach(cat => {
+	            realityRatingText += `${cat.label}: ${ratings[cat.id]}分\n`;
+	        });
+	
+	        const fullData = `訪談對象姓名：${intervieweeInfo.name}\n\n${idealRankingText}\n${realityRatingText}`;
+	        
+	        // 2. 建立關鍵的 Prompt
+	        const prompt = createAIPrompt(fullData);
+	
+	        // 清除文字切換
+	        clearInterval(textInterval);
+	        
+	        // 3. 呼叫我們自己的後端 API
+	        callMyBackendAPI(prompt);
+	    }, 800);
+	}
 
-        // 1. 整理要給 AI 的資料
-        let idealRankingText = "理想工作重要性排序：\n";
-        rankings.forEach((cat, index) => {
-            idealRankingText += `${index + 1}. ${cat.label} (${cat.icon})\n`;
-        });
+	// --- 新增：建立給 AI 的指令 ---
+	function createAIPrompt(data) {
+	    const topPriority = rankings[0];
+	    const topPrioritySatisfaction = ratings[topPriority.id];
+	
+	    // ✅ 新增：計算總滿意度分數
+	    let totalRatingScore = 0;
+	    for (const categoryId in ratings) {
+	        totalRatingScore += ratings[categoryId];
+	    }
+	
+	    return `
+	        你是一位資深的職場心理分析師和創業導師。根據以下數據進行深度心理分析：
+	        **分析數據：**
+	        - 受訪者姓名：${intervieweeInfo.name}
+	        - 理想工作重要性排序：${rankings.map(cat => cat.label).join(' > ')}
+	        - 目前工作滿意度評分：${Object.entries(ratings).map(([id, score]) => `${categories.find(cat => cat.id === id).label}: ${score}/5`).join(', ')}
+	        - 總滿意度：${totalRatingScore}/25    // ✅ 現在 totalRatingScore 已經定義了！
+	        
+	        **分析指引：**
+	        1. **深層動機解析**：從排序看出此人的核心驅動力和內在渴望，用溫暖但犀利的語調點出他們可能自己都沒意識到的深層需求        
+	        2. **現實困境共鳴**：分析滿意度數據，描述他們可能正在經歷的職場困境，讓他們感到「被理解」        
+	        3. **潛能喚醒**：根據他們最重視的項目，暗示他們具備某些特質，這些特質在創業中會是優勢        
+	        4. **轉折引導**：不直接提創業，而是先談「掌控權」「自主性」「實現價值」等概念，讓他們自然聯想到創業
+	        
+	        **語調要求：**
+	        - 像一位懂你的朋友在深夜談心
+	        - 既溫暖又有洞察力
+	        - 讓人感到被深度理解
+	        - 在最後自然地種下「也許你需要的是更大的舞台」的種子
+	        
+	        請用繁體中文，約100-200字，分3-4個段落呈現。
+	        使用markdown格式，讓整體易讀，重點以粗體字表示。
+	
+	        `;
+	}	    
 
-        let realityRatingText = "目前工作滿意度評分 (1分很不滿意, 5分很滿意)：\n";
-        rankings.forEach(cat => {
-            realityRatingText += `${cat.label}: ${ratings[cat.id]}分\n`;
-        });
-
-        const fullData = `訪談對象姓名：${intervieweeInfo.name}\n\n${idealRankingText}\n${realityRatingText}`;
-        
-        // 2. 建立關鍵的 Prompt
-        const prompt = createAIPrompt(fullData);
-
-        // 3. 呼叫我們自己的後端 API
-        callMyBackendAPI(prompt);
-    }
-
-    // --- 新增：建立給 AI 的指令 ---
-    function createAIPrompt(data) {
-        const topPriority = rankings[0];
-        const topPrioritySatisfaction = ratings[topPriority.id];
-
-        return `
-		你是一位資深的職場心理分析師和創業導師。根據以下數據進行深度心理分析：
-		**分析數據：**
-		- 受訪者姓名：${intervieweeInfo.name}
-		- 理想工作重要性排序：${rankings.map(cat => cat.label).join(' > ')}
-		- 目前工作滿意度評分：${Object.entries(ratings).map(([id, score]) => `${categories.find(cat => cat.id === id).label}: ${score}/5`).join(', ')}
-		- 總滿意度：${totalRatingScore}/25	
-		
-		**分析指引：**
-		1. **深層動機解析**：從排序看出此人的核心驅動力和內在渴望，用溫暖但犀利的語調點出他們可能自己都沒意識到的深層需求		
-		2. **現實困境共鳴**：分析滿意度數據，描述他們可能正在經歷的職場困境，讓他們感到「被理解」		
-		3. **潛能喚醒**：根據他們最重視的項目，暗示他們具備某些特質，這些特質在創業中會是優勢		
-		4. **轉折引導**：不直接提創業，而是先談「掌控權」「自主性」「實現價值」等概念，讓他們自然聯想到創業
-		
-		**語調要求：**
-		- 像一位懂你的朋友在深夜談心
-		- 既溫暖又有洞察力
-		- 讓人感到被深度理解
-		- 在最後自然地種下「也許你需要的是更大的舞台」的種子
-		
-		請用繁體中文，約100-200字，分3-4個段落呈現。
-  		使用markdown格式，讓整體易讀，重點以粗體字表示。
-
-
-        `;
-    }
-
-    // --- 新增：呼叫後端 API 的函式 ---
-    async function callMyBackendAPI(prompt) {
-        const aiContent = document.getElementById('ai-content');
-        const aiBtn = document.getElementById('ai-interpret-btn');
-        
-        try {
-            // 這會呼叫我們在 Vercel 上的後端函式
-            const response = await fetch('/api/interpret', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ prompt: prompt }),
-            });
-
-            if (!response.ok) {
-                const errorResult = await response.json();
-                throw new Error(errorResult.message || 'API 請求失敗');
-            }
-
-            const result = await response.json();
-            aiContent.textContent = result.text; // 直接顯示純文字結果
-
-        } catch (error) {
-            console.error('呼叫後端 API 時發生錯誤:', error);
-            aiContent.textContent = `分析失敗，請稍後再試。錯誤訊息：${error.message}`;
-        } finally {
-            // 無論成功或失敗，都恢復按鈕狀態
-            aiBtn.disabled = false;
-            aiBtn.innerHTML = '🤖 取得 AI 深度解讀';
-        }
-    }
+	async function callMyBackendAPI(prompt) {
+	    const aiContent = document.getElementById('ai-content');
+	    const aiBtn = document.getElementById('ai-interpret-btn');
+	    
+	    try {
+	        // 這會呼叫我們在 Vercel 上的後端函式
+	        const response = await fetch('/api/interpret', {
+	            method: 'POST',
+	            headers: { 'Content-Type': 'application/json' },
+	            body: JSON.stringify({ prompt: prompt }),
+	        });
+	
+	        if (!response.ok) {
+	            const errorResult = await response.json();
+	            throw new Error(errorResult.message || 'API 請求失敗');
+	        }
+	
+	        const result = await response.json();
+	        
+	        // ✨ 完成時的特效
+	        aiContent.innerHTML = `
+	            <div style="text-align: center; margin-bottom: 20px;">
+	                <div style="font-size: 24px; margin-bottom: 10px;">✨</div>
+	                <div style="color: #059669; font-weight: 600;">分析完成！</div>
+	            </div>
+	        `;
+	        
+	        // 短暫停留後顯示結果
+	        setTimeout(() => {
+	            aiContent.innerHTML = `<div style="line-height: 1.6; white-space: pre-wrap;">${result.text}</div>`;
+	        }, 1000);
+	
+	    } catch (error) {
+	        console.error('呼叫後端 API 時發生錯誤:', error);
+	        aiContent.innerHTML = `
+	            <div style="text-align: center; color: #dc2626;">
+	                <div style="font-size: 24px; margin-bottom: 10px;">❌</div>
+	                <div>分析失敗，請稍後再試</div>
+	                <div style="font-size: 14px; margin-top: 10px; color: #6b7280;">
+	                    錯誤訊息：${error.message}
+	                </div>
+	            </div>
+	        `;
+	    } finally {
+	        // 無論成功或失敗，都恢復按鈕狀態
+	        aiBtn.disabled = false;
+	        aiBtn.innerHTML = '🤖 取得 AI 深度解讀';
+	    }
+	}
 
         function validateBasicInfo() {
             const name = document.getElementById('interviewee-name').value.trim();
