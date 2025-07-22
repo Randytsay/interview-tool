@@ -38,7 +38,8 @@ export default async function handler(request, response) {
       },
       body: JSON.stringify({
         // 指定您想使用的模型
-        "model": "deepseek/deepseek-r1-0528:free", 
+        // "model": "deepseek/deepseek-r1-0528:free", 
+        "model": "deepseek/deepseek-chat-v3-0324:free",
         // 訊息格式改為 OpenRouter/OpenAI 的標準格式
         "messages": [
           { "role": "user", "content": prompt }
