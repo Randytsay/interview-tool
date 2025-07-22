@@ -594,6 +594,23 @@
     .ranking-item .ranking-controls {
          cursor: default; /* Or auto */
     }
+    #ai-results-area {
+        margin-top: 15px;
+    }
+    
+    #ai-content h1, #ai-content h2, #ai-content h3 {
+        font-size: 16px !important;
+        margin: 12px 0 6px 0 !important;
+    }
+    
+    #ai-content p {
+        margin-bottom: 8px !important;
+        font-size: 15px;
+    }
+    
+    #ai-content strong {
+        color: #4f46e5;
+    }	
 }
 
 
@@ -812,9 +829,9 @@
 	    
 	    // 創建動態載入效果
 	    aiContent.innerHTML = `
-	        <div style="text-align: center; padding: 30px 20px;">
-	            <div style="font-size: 24px; margin-bottom: 15px;">🧠</div>
-	            <div id="ai-thinking-text" style="font-size: 18px; color: #4f46e5; font-weight: 600; margin-bottom: 20px;">
+	        <div style="text-align: center; padding: 20px 15px;">
+	            <div style="font-size: 24px; margin-bottom: 8px;">🧠</div>
+	            <div id="ai-thinking-text" style="font-size: 18px; color: #4f46e5; font-weight: 600; margin-bottom: 15px;">
 	                AI 正在深度分析你的職涯特質
 	            </div>
 	            <div id="loading-dots" style="font-size: 24px; color: #4f46e5;">
@@ -884,6 +901,32 @@
 	    }, 800);
 	}
 
+	// ✅ 新增：簡單的 Markdown 轉 HTML 函數
+	function convertMarkdownToHTML(markdown) {
+	    return markdown
+	        // 粗體文字：**text** 或 __text__
+	        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+	        .replace(/__(.*?)__/g, '<strong>$1</strong>')
+	        
+	        // 斜體文字：*text* 或 _text_
+	        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+	        .replace(/_(.*?)_/g, '<em>$1</em>')
+	        
+	        // 標題：### text
+	        .replace(/^### (.*$)/gm, '<h3 style="color: #4f46e5; margin: 16px 0 8px 0; font-size: 18px;">$1</h3>')
+	        .replace(/^## (.*$)/gm, '<h2 style="color: #4f46e5; margin: 20px 0 10px 0; font-size: 20px;">$1</h2>')
+	        .replace(/^# (.*$)/gm, '<h1 style="color: #4f46e5; margin: 24px 0 12px 0; font-size: 22px;">$1</h1>')
+	        
+	        // 換行處理：雙換行變成段落
+	        .replace(/\n\n/g, '</p><p style="margin-bottom: 12px;">')
+	        .replace(/\n/g, '<br>')
+	        
+	        // 包裝成段落
+	        .replace(/^/, '<p style="margin-bottom: 12px;">')
+	        .replace(/$/, '</p>');
+	}
+	    
+
 	// --- 新增：建立給 AI 的指令 ---
 	function createAIPrompt(data) {
 	    const topPriority = rankings[0];
@@ -950,7 +993,8 @@
 	        
 	        // 短暫停留後顯示結果
 	        setTimeout(() => {
-	            aiContent.innerHTML = `<div style="line-height: 1.6; white-space: pre-wrap;">${result.text}</div>`;
+	            const htmlContent = convertMarkdownToHTML(result.text);
+	            aiContent.innerHTML = `<div style="line-height: 1.6;">${htmlContent}</div>`;
 	        }, 1000);
 	
 	    } catch (error) {
@@ -965,7 +1009,7 @@
 	            </div>
 	        `;
 	    } finally {
-	        // 無論成功或失敗，都恢復按鈕狀態
+	        // 恢復按鈕狀態
 	        aiBtn.disabled = false;
 	        aiBtn.innerHTML = '🤖 取得 AI 深度解讀';
 	    }
