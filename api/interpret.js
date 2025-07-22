@@ -34,7 +34,7 @@ export default async function handler(request, response) {
         // 以下為 OpenRouter 建議的選填標頭，有助於他們進行排名和追蹤
         // 請將 YOUR_SITE_URL 和 YOUR_SITE_NAME 換成您自己的資訊
         'HTTP-Referer': 'https://interview-tool-eight.vercel.app//', 
-        'X-Title': '工作的理想與現實', // 您的網站標題
+        'X-Title': encodeURIComponent('工作的理想與現實'),
       },
       body: JSON.stringify({
         // 指定您想使用的模型
