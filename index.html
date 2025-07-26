@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -5,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>工作的理想與現實</title>
 
-    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://randytsay.github.io/interview-tool/">
     <meta property="og:title" content="工作的理想與現實 - 百業訪談問卷">
@@ -14,18 +14,15 @@
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
 
-    <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://randytsay.github.io/interview-tool/">
     <meta property="twitter:title" content="工作的理想與現實-訪談問卷">
     <meta property="twitter:description" content="探索理想工作與現實差距！">
     <meta property="twitter:image" content="https://randytsay.github.io/interview-tool/images/survey-preview.jpg">
 
-    <!-- LINE 特別支援 -->
     <meta property="og:site_name" content="訪談表">
     <meta name="description" content="探索理想工作與現實差距！">
 
-    <!-- 引入 SortableJS 函式庫 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
 
     <style>
@@ -297,7 +294,8 @@
         }
 
         .slider-container {
-            padding: 0 8px;
+            position: relative;
+            padding-bottom: 20px;
         }
 
         .slider {
@@ -309,6 +307,28 @@
             -webkit-appearance: none;
             appearance: none;
         }
+        
+        /* 【方案一】新增：定義脈衝動畫 */
+        @keyframes pulse {
+          0% {
+            box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.4);
+          }
+          70% {
+            box-shadow: 0 0 0 10px rgba(79, 70, 229, 0);
+          }
+          100% {
+            box-shadow: 0 0 0 0 rgba(79, 70, 229, 0);
+          }
+        }
+          70% {
+            transform: scale(1.1);
+            box-shadow: 0 0 0 10px rgba(79, 70, 229, 0);
+          }
+          100% {
+            transform: scale(1);
+            box-shadow: 0 0 0 0 rgba(79, 70, 229, 0);
+          }
+        }
 
         .slider::-webkit-slider-thumb {
             -webkit-appearance: none;
@@ -318,7 +338,8 @@
             border-radius: 50%;
             background: #4f46e5;
             cursor: pointer;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            /* 【方案一】新增：應用動畫 */
+            animation: pulse 2s infinite;
         }
 
         .slider::-moz-range-thumb {
@@ -328,8 +349,31 @@
             background: #4f46e5;
             cursor: pointer;
             border: none;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            /* 【方案一】新增：應用動畫 */
+            animation: pulse 2s infinite;
         }
+        
+		.slider-drag-hint {
+			position: absolute;
+			/* 【關鍵】將提示框放在滑桿的下方，而不是在滑軌上 */
+			top: 25px;
+			left: 50%;
+			transform: translateX(-50%);
+			display: flex;
+			align-items: center;
+			gap: 6px;
+			font-size: 13px;
+			color: #6b7280;
+			background: #f3f4f6;
+			padding: 2px 8px;
+			border-radius: 6px;
+			pointer-events: none; /* 讓滑鼠可以穿透此元素 */
+		}
+
+        .slider-drag-hint .hint-icon {
+            font-size: 16px;
+        }
+
 
         .slider-labels {
             display: flex;
@@ -618,7 +662,6 @@
 </head>
 <body>
     <div class="container">
-        <!-- 第一頁：基本資料 -->
         <div id="page-0" class="card">
             <div class="card-header">
                 <div class="card-title">探索理想工作與現實訪談</div>
@@ -638,7 +681,6 @@
             </div>
         </div>
 
-        <!-- 第二頁：排序 -->
         <div id="page-1" class="card hidden">
             <div class="progress-bar">
                 <div class="progress-dot active"></div>
@@ -655,18 +697,14 @@
             </div>
             <div class="card-content">
                 <div id="ranking-list">
-                    <!-- Ranking items will be generated here by JS -->
-                </div>
+                    </div>
                 <div class="info-text">💡 提示：按住並拖拉項目即可調整順序</div>
-                 <!-- Removed arrow button hints -->
-                 <!-- <div class="info-text">💡 提示：點擊上下箭頭可調整順序</div> -->
-                <button id="next-to-rating" class="btn" style="margin-top: 20px;">
+                 <button id="next-to-rating" class="btn" style="margin-top: 20px;">
                     下一題 →
                 </button>
             </div>
         </div>
 
-        <!-- 第三頁：評分 -->
         <div id="page-2" class="card hidden">
             <div class="progress-bar">
                 <div class="progress-dot active"></div>
@@ -694,7 +732,6 @@
             </div>
         </div>
 
-        <!-- 第四頁：結果 -->
         <div id="page-results" class="card hidden">
             <div class="progress-bar">
                 <div class="progress-dot active"></div>
@@ -710,30 +747,21 @@
                 <div class="card-subtitle" id="results-date"></div>
             </div>
             <div class="card-content">
-                <!-- Removed the redundant ideal ranking summary -->
-
-                <!-- 整合顯示：理想重要性排序下的目前滿意度 -->
                 <div class="results-section">
                     <div class="results-title">
                         💭理想 (左邊數字) 與 📊現實 (右邊評分) 比較
                     </div>
                     <div id="integrated-results">
-                        <!-- 這裡將由 JavaScript 填充整合後的結果 -->
-                    </div>
-                    <!-- 建議顯示區域 -->
+                        </div>
                     <div id="suggestion-area">
-                         <!-- 這裡將由 JavaScript 填充建議 -->
-                    </div>
+                         </div>
 
                 </div>
-
-                <!-- Removed download/screenshot buttons -->
 
                 <button id="reset-survey" class="btn btn-outline">
                     🔄 開始新的訪談
                 </button>
-                <!-- Removed screenshot hint -->
-            </div>
+                </div>
         </div>
 
         <div class="info-text" id="current-info"></div>
@@ -1109,8 +1137,7 @@
                         <span class="ranking-icon">${category.icon}</span>
                         <span class="ranking-label">${category.label}</span>
                     </div>
-                    <!-- Arrows removed from HTML -->
-                `;
+                    `;
                 container.appendChild(item);
             });
              // Re-initialize SortableJS after rendering
@@ -1182,6 +1209,7 @@
             categories.forEach(category => {
                 const item = document.createElement('div');
                 item.className = 'rating-item';
+                // 【方案二】修改此處的 innerHTML
 				item.innerHTML = `
 					<div class="rating-header">
 						<span class="rating-label">
@@ -1191,9 +1219,13 @@
 						<span class="rating-value" id="rating-${category.id}">${ratings[category.id] || 3}/5</span>
 					</div>
 					<div class="slider-container">
-						<input type="range" min="1" max="5" value="${ratings[category.id] || 3}"
-							   class="slider" id="slider-${category.id}"
-							   oninput="updateRating('${category.id}', this.value)">
+						<input type="range" min="1" max="5" value="${ratings[category.id] || 3}" class="slider" id="slider-${category.id}" oninput="updateRating('${category.id}', this.value)">
+
+                        <div class="slider-drag-hint">
+                            <span class="hint-icon">↔️</span>
+                            <span>左右拖動評分</span>
+                        </div>
+                        
 						<div class="slider-labels">
 							<span>很不滿意</span>
 							<span>普通</span>
@@ -1398,3 +1430,4 @@ document.addEventListener('DOMContentLoaded', initializeSliderStyles);
       </script>
   </body>
   </html>
+
