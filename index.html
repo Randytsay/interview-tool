@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -70,7 +69,10 @@
             font-size: 0.9rem;
             opacity: 0.9;
         }
-
+		.subtitle-note {
+			font-size: 0.8rem;  /* 設定比原本稍小的字體 */
+			opacity: 0.8;       /* 讓顏色稍微淡一點，不那麼搶眼 */
+		}
         .card-content {
             padding: 24px;
         }
@@ -149,36 +151,7 @@
             background: #047857;
         }
 
-        .progress-bar {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin-bottom: 24px;
-        }
 
-        .progress-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: #d1d5db;
-            transition: background 0.3s;
-        }
-
-        .progress-dot.active {
-            background: #4f46e5;
-        }
-
-        .progress-line {
-            width: 32px;
-            height: 4px;
-            background: #d1d5db;
-            transition: background 0.3s;
-        }
-
-        .progress-line.active {
-            background: #4f46e5;
-        }
 
         .ranking-item {
             display: flex;
@@ -266,16 +239,16 @@
         .rating-item {
             border: 2px solid #e5e7eb;
             border-radius: 12px;
-            padding: 20px;
+            padding: 12px;
             background: #f9fafb;
-            margin-bottom: 16px;
+            margin-bottom: 10px;
         }
 
         .rating-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 16px;
+            margin-bottom: 8px;
         }
 
         .rating-label {
@@ -293,95 +266,134 @@
             color: #4f46e5;
         }
 
-        .slider-container {
-            position: relative;
-            padding-bottom: 20px;
-        }
-
-        .slider {
-            width: 100%;
-            height: 8px;
-            border-radius: 4px;
-            outline: none;
-            cursor: pointer;
-            -webkit-appearance: none;
-            appearance: none;
-        }
-        
-        /* 【方案一】新增：定義脈衝動畫 */
-        @keyframes pulse {
-          0% {
-            box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.4);
-          }
-          70% {
-            box-shadow: 0 0 0 10px rgba(79, 70, 229, 0);
-          }
-          100% {
-            box-shadow: 0 0 0 0 rgba(79, 70, 229, 0);
-          }
-        }
-          70% {
-            transform: scale(1.1);
-            box-shadow: 0 0 0 10px rgba(79, 70, 229, 0);
-          }
-          100% {
-            transform: scale(1);
-            box-shadow: 0 0 0 0 rgba(79, 70, 229, 0);
-          }
-        }
-
-        .slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: #4f46e5;
-            cursor: pointer;
-            /* 【方案一】新增：應用動畫 */
-            animation: pulse 2s infinite;
-        }
-
-        .slider::-moz-range-thumb {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: #4f46e5;
-            cursor: pointer;
-            border: none;
-            /* 【方案一】新增：應用動畫 */
-            animation: pulse 2s infinite;
-        }
-        
-		.slider-drag-hint {
-			position: absolute;
-			/* 【關鍵】將提示框放在滑桿的下方，而不是在滑軌上 */
-			top: 25px;
-			left: 50%;
-			transform: translateX(-50%);
-			display: flex;
-			align-items: center;
-			gap: 6px;
-			font-size: 13px;
-			color: #6b7280;
-			background: #f3f4f6;
-			padding: 2px 8px;
-			border-radius: 6px;
-			pointer-events: none; /* 讓滑鼠可以穿透此元素 */
+		/* 移除進度條 */
+		.progress-bar {
+			display: none !important;
 		}
 
-        .slider-drag-hint .hint-icon {
-            font-size: 16px;
-        }
+		/* 星星評分系統樣式 */
+		.star-rating {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 8px;
+			margin: 8px 0;
+			padding: 8px;
+		}
 
+		.star {
+			font-size: 32px;
+			color: #d1d5db;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			user-select: none;
+			position: relative;
+		}
 
-        .slider-labels {
-            display: flex;
-            justify-content: space-between;
-            font-size: 12px; /* Base size */
-            color: #6b7280;
-            margin-top: 8px;
-        }
+		.star:hover {
+			transform: scale(1.1);
+		}
+
+		.star.active {
+			color: #fbbf24;
+			text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+		}
+
+		.star.hover {
+			color: #fbbf24;
+			transform: scale(1.1);
+		}
+
+		/* 星星點亮動畫效果 */
+		@keyframes starGlow {
+			0% {
+				transform: scale(1);
+				text-shadow: 0 0 5px rgba(251, 191, 36, 0.5);
+			}
+			50% {
+				transform: scale(1.2);
+				text-shadow: 0 0 20px rgba(251, 191, 36, 0.8);
+			}
+			100% {
+				transform: scale(1);
+				text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+			}
+		}
+
+		.star.active {
+			color: #fbbf24;
+			text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);			
+		}
+		
+		.star-glow-effect {
+			animation: starGlow 0.3s ease-in-out;
+		}
+		
+		.star-hint {
+			text-align: center;
+			font-size: 14px;
+			color: #6b7280;
+			margin-top: 4px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 6px;
+		}
+
+		/* 手機版星星大小調整 */
+		@media (max-width: 768px) {
+			.star {
+				font-size: 26px;
+				gap: 4px;
+			}
+
+			.star-rating {
+				gap: 4px;
+				padding: 6px;
+			}
+
+			.rating-item {
+				padding-top: 8px;
+				padding-bottom: 8px;
+				margin-bottom: 6px; 
+			}
+			
+			.rating-header {
+				margin-bottom: 6px; /* 手機版進一步減少間距 */
+			}
+			
+			.star-hint {
+				font-size: 11px; /* 手機版進一步縮小提示文字 */
+				margin-top: 2px; /* 減少上邊距 */
+			}	
+
+			.card-content {
+				padding: 12px; /* 進一步減少手機版內容區域 padding */
+			}
+			
+			/* 縮小標題和星星之間的距離 */
+			#page-2 .rating-header {
+				margin-bottom: 4px; 
+			}	
+
+			/* 縮小星星區塊的上下外距 */
+			#page-2 .star-rating {
+				margin: 2px 0;
+				padding: 4px;
+			}
+			
+			#page-2 .card-content {
+				padding: 10px; /* 評分頁面更緊湊的間距 */
+			}
+			
+			#page-2 .star-hint {
+				display: none;
+			}
+			
+			#page-results .progress-bar {
+				display: none;
+			}
+		}
 
         .results-section {
             background: white;
@@ -403,7 +415,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 12px;
+            padding: 10px;
             background: #f9fafb;
             border-radius: 8px;
             margin-bottom: 8px;
@@ -473,11 +485,15 @@
 
         .info-text {
             text-align: center;
-            font-size: 12px; /* Base size */
-            color: #6b7280;
-            margin-top: 16px;
+            font-size: 10px; /* Base size */
+            color: white;
+            margin-top: 12px;
         }
-
+		
+		#page-1 .info-text {
+			color: #6b7280; /* 將顏色指定為深灰色 */
+		}
+		
         .highlight {
             color: #fbbf24;
             font-weight: 900;
@@ -693,7 +709,9 @@
             </div>
             <div class="card-header">
                 <div class="card-title">💭 <span class="highlight">理想</span>工作重要性排序</div>
-                <div class="card-subtitle">請用上下拖拉調整順序 (上方最重要 → 下方最不重要)</div>
+                <div class="card-subtitle">請用上下拖拉調整順序<br> 
+				<span class="subtitle-note">(上方最重要 → 下方最不重要)</span>
+				</div>
             </div>
             <div class="card-content">
                 <div id="ranking-list">
@@ -749,7 +767,7 @@
             <div class="card-content">
                 <div class="results-section">
                     <div class="results-title">
-                        💭理想 (左邊數字) 與 📊現實 (右邊評分) 比較
+                        💭理想 (左邊) 與 📊現實 (右邊) 比較
                     </div>
                     <div id="integrated-results">
                         </div>
@@ -826,7 +844,6 @@
         updateCurrentInfo();
         renderRankingList();
         renderRatingList();
-        initializeSliderStyles();
         initializeSortable();
     });
 
@@ -834,7 +851,13 @@
         document.getElementById('interviewee-name').addEventListener('input', validateBasicInfo);
         document.getElementById('interview-date').addEventListener('change', validateBasicInfo);
         document.getElementById('start-btn').addEventListener('click', startSurvey);
-        document.getElementById('next-to-rating').addEventListener('click', () => showPage(2));
+        
+        // ✅ [已修改] 在前往評分頁前，先重新產生評分列表
+        document.getElementById('next-to-rating').addEventListener('click', () => {
+            renderRatingList(); // 根據理想排序的結果，重新產生評分列表
+            showPage(2);
+        });
+
         document.getElementById('back-to-ranking').addEventListener('click', () => showPage(1));
         document.getElementById('show-results').addEventListener('click', showResults);
         document.getElementById('reset-survey').addEventListener('click', resetSurvey);
@@ -1090,36 +1113,122 @@
             currentPage = pageNum;
             updateCurrentInfo();
 
-            // 更新進度條
-            updateProgressBar(pageNum);
+
         }
 
-        function updateProgressBar(pageNum) {
-             const dots = document.querySelectorAll('.progress-dot');
-             const lines = document.querySelectorAll('.progress-line');
+		// 星星評分功能
+		function createStarRating(categoryId, currentRating = 3) {
+			const starContainer = document.createElement('div');
+			starContainer.className = 'star-rating';
+			starContainer.dataset.categoryId = categoryId;
 
-             // 進度條對應關係： Page 0 -> Dot 1, Page 1 -> Dot 2, Page 2 -> Dot 3, Page Results -> Dot 4
-             // 連線是介於點之間
-             const activeDotIndex = (pageNum === 99) ? 3 : pageNum; // 結果頁對應第四個點 (索引 3)
+			for (let i = 1; i <= 5; i++) {
+				const star = document.createElement('span');
+				star.className = 'star';
+				star.dataset.rating = i;
+				star.innerHTML = '★';
+				
+				if (i <= currentRating) {
+					star.classList.add('active');
+				}
 
-             dots.forEach((dot, index) => {
-                 if (index <= activeDotIndex) {
-                     dot.classList.add('active');
-                 } else {
-                     dot.classList.remove('active');
-                 }
-             });
+				// 點擊事件
+				star.addEventListener('click', function() {
+					// "this" 就是使用者當前點擊的這顆星
+					const clickedStar = this; 
+					const rating = parseInt(clickedStar.dataset.rating);
 
-             lines.forEach((line, index) => {
-                 // 連線在兩個 active 點之間時 active
-                 // 注意：lines 的索引比 dots 少一個，lines[0] 在 dots[0] 和 dots[1] 之間
-                 if (index < activeDotIndex) {
-                      line.classList.add('active');
-                 } else {
-                      line.classList.remove('active');
-                 }
-             });
-        }
+					// 1. 找到同一組的所有星星
+					const allStarsInGroup = clickedStar.parentElement.querySelectorAll('.star');
+
+					// 2. 先移除所有星星上可能殘留的動畫 class，避免重複觸發
+					allStarsInGroup.forEach(s => s.classList.remove('star-glow-effect'));
+
+					// 3. 只在「被點擊」的這顆星上加上動畫 class
+					clickedStar.classList.add('star-glow-effect');
+
+					// 4. 最後，才呼叫原本的函式去更新所有星星的顏色狀態
+					updateStarRating(categoryId, rating);
+				});
+
+				// 懸停效果
+				star.addEventListener('mouseenter', function() {
+					const rating = parseInt(this.dataset.rating);
+					highlightStars(starContainer, rating, true);
+				});
+
+				starContainer.appendChild(star);
+			}
+
+			// 滑鼠離開容器時恢復原狀
+			starContainer.addEventListener('mouseleave', function() {
+				const currentRating = ratings[categoryId];
+				highlightStars(starContainer, currentRating, false);
+			});
+
+			const hintDiv = document.createElement('div');
+			hintDiv.className = 'star-hint';
+			hintDiv.innerHTML = '<span>⭐</span><span>點擊星星評分</span>';
+
+			const container = document.createElement('div');
+			container.appendChild(starContainer);
+			container.appendChild(hintDiv);
+
+			return container;
+		}
+
+		function highlightStars(container, rating, isHover = false) {
+			const stars = container.querySelectorAll('.star');
+			stars.forEach((star, index) => {
+				star.classList.remove('active', 'hover');
+				if (index < rating) {
+					star.classList.add(isHover ? 'hover' : 'active');
+				}
+			});
+		}
+
+		function updateStarRating(categoryId, rating) {
+			ratings[categoryId] = rating;
+			
+			// 更新顯示的評分數字
+			const ratingValueElement = document.getElementById(`rating-${categoryId}`);
+			if (ratingValueElement) {
+				ratingValueElement.textContent = `${rating}/5`;
+			}
+
+			// 更新星星顯示
+			const starContainer = document.querySelector(`[data-category-id="${categoryId}"]`);
+			if (starContainer) {
+				highlightStars(starContainer, rating, false);
+			}
+
+			console.log(`Updated ${categoryId} rating to ${rating}`);
+		}
+
+	function renderRatingList() {
+		const container = document.getElementById('rating-list');
+		container.innerHTML = '';
+
+		// ✅ 使用 rankings 陣列（用戶排序後的順序）而不是原始 categories
+		rankings.forEach(category => {
+			const item = document.createElement('div');
+			item.className = 'rating-item';
+			
+			const headerDiv = document.createElement('div');
+			headerDiv.className = 'rating-header';
+			headerDiv.innerHTML = `
+				<span class="rating-label">
+					<span class="ranking-icon">${category.icon}</span>
+					${category.label}
+				</span>
+				<span class="rating-value" id="rating-${category.id}">${ratings[category.id] || 3}/5</span>
+			`;
+			
+			item.appendChild(headerDiv);
+			item.appendChild(createStarRating(category.id, ratings[category.id] || 3));
+			container.appendChild(item);
+		});
+	}
 
 
         function renderRankingList() {
@@ -1201,62 +1310,7 @@
          }
 
 
-        function renderRatingList() {
-            const container = document.getElementById('rating-list');
-            container.innerHTML = '';
 
-            // Render based on the *initial* categories order for consistency on this page
-            categories.forEach(category => {
-                const item = document.createElement('div');
-                item.className = 'rating-item';
-                // 【方案二】修改此處的 innerHTML
-				item.innerHTML = `
-					<div class="rating-header">
-						<span class="rating-label">
-							<span class="ranking-icon">${category.icon}</span>
-							${category.label}
-						</span>
-						<span class="rating-value" id="rating-${category.id}">${ratings[category.id] || 3}/5</span>
-					</div>
-					<div class="slider-container">
-						<input type="range" min="1" max="5" value="${ratings[category.id] || 3}" class="slider" id="slider-${category.id}" oninput="updateRating('${category.id}', this.value)">
-
-                        <div class="slider-drag-hint">
-                            <span class="hint-icon">↔️</span>
-                            <span>左右拖動評分</span>
-                        </div>
-                        
-						<div class="slider-labels">
-							<span>很不滿意</span>
-							<span>普通</span>
-							<span>很滿意</span>
-						</div>
-					</div>
-				`;
-                container.appendChild(item);
-            });
-            // 初始化滑桿樣式 (確保在滑桿元素被添加到 DOM 後執行)
-            initializeSliderStyles();
-        }
-
-        function updateRating(categoryId, value) {
-            ratings[categoryId] = parseInt(value);
-            document.getElementById(`rating-${categoryId}`).textContent = `${value}/5`;
-
-            // 更新滑桿顏色
-            const slider = document.getElementById(`slider-${categoryId}`);
-            const percentage = ((value - 1) / 4) * 100;
-            slider.style.background = `linear-gradient(to right, #4f46e5 0%, #4f46e5 ${percentage}%, #e5e7eb ${percentage}%, #e5e7eb 100%)`;
-        }
-
-        // 初始化所有滑桿的背景顏色
-        function initializeSliderStyles() {
-             document.querySelectorAll('.slider').forEach(slider => {
-                 const value = slider.value;
-                 const percentage = ((value - 1) / 4) * 100;
-                 slider.style.background = `linear-gradient(to right, #4f46e5 0%, #4f46e5 ${percentage}%, #e5e7eb ${percentage}%, #e5e7eb 100%)`;
-             });
-        }
 
 
         function showResults() {
@@ -1335,7 +1389,7 @@
                      'growth': '感受到自己不斷進步，成為一個更好的人，讓自己越來越肯定自己，是你深埋內心的使命。',
                      'value': '你從來不吝於付出，對於能夠幫助更多人解決問題，或幫助這個世界能夠更好，充滿熱情。',
                      'prospect': '對於趨勢和世界脈動，你總是目光如炬，有著獨到的想法和見解，一旦能夠擁有付諸實行的計畫將如虎添翼。',
-                     'promotion': '在群體內扮演恰如其分的角色，並且發揮影響力，得到別人的尊重與認同，是對具有領袖氣質的你的最佳描述。'
+                     'promotion': '在群體内扮演恰如其分的角色，並且發揮影響力，得到別人的尊重與認同，是對具有領袖氣質的你的最佳描述。'
                  };
                  // 使用 div.suggestion-text 作為第一段
                  suggestionContent += `<div class="suggestion-text">針對您最看重的『${top1Category.label}』(${top1Category.icon})，這可能反映出：<br>${top1SuggestionMap[top1Category.id] || '您對此非常重視。'}</div>`;
@@ -1409,8 +1463,8 @@ function resetSurvey() {
 
         renderRankingList(); // 重新渲染排序列表 (page 1)
         renderRatingList(); // 重新渲染評分列表 (page 2)
-        initializeSliderStyles(); // 重新初始化滑桿樣式
-        updateProgressBar(0); // 重設進度條
+        // initializeSliderStyles(); // <-- 已刪除
+        // updateProgressBar(0); // <-- 已刪除
         showPage(0); // 返回到基本資料頁面
     }
 }
@@ -1424,10 +1478,7 @@ function updateCurrentInfo() {
     }
 }
 
-// 初始化所有滑桿的背景顏色 (頁面載入時執行一次)
-document.addEventListener('DOMContentLoaded', initializeSliderStyles);
 
       </script>
   </body>
   </html>
-
